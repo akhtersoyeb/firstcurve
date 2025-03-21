@@ -6,6 +6,7 @@ import { useRouter } from "next/router"
 import { createClient } from "@/lib/supabase/component"
 import { useState } from "react"
 import Link from "next/link"
+import { toast } from "sonner"
 
 export function LoginForm({ className, ...props }) {
   const router = useRouter()
@@ -21,10 +22,12 @@ export function LoginForm({ className, ...props }) {
       password,
     })
     if (error) {
-      console.error(error)
-    } else {
-      router.push("/dashboard")
+      toast.error("Error signing up", {
+        description: error.message
+      })
+      return
     }
+    router.push("/dashboard")
   }
   return (
     <form

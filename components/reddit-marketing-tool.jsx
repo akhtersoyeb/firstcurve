@@ -9,6 +9,59 @@ import { cn } from "@/lib/utils"
 import { Separator } from "@/components/ui/separator"
 import Navbar from "@/components/user-navbar"
 
+const MOCK_QUERIES = [
+  "best way to organize thoughts ideas",
+  "simplest note taking method for students",
+  "how to remember everything I learn",
+  "struggling with information overload",
+  "need a better way to manage tasks and notes",
+  "recommended productivity tools for writers",
+  "effective way to brainstorm ideas",
+  "best way to collaborate on notes with team",
+  "how to improve my study habits effectively",
+  "looking for an app to keep track of projects",
+  "note taking app for creative writing",
+  "digital notebook alternative",
+  "how to take better meeting notes",
+  "tips for staying organized while working from home",
+  "simplifying my workflow what tools to use",
+  "best apps for capturing and organizing information",
+  "dealing with scattered notes and documents",
+  "note taking tips for better focus and concentration",
+  "best way to plan and execute projects solo",
+  "looking for an intuitive notes system",
+  "organizing research for writing a book",
+  "how to manage multiple projects effectively",
+  "best app for creating knowledge base",
+  "simplest way to take notes during lectures",
+  "staying on top of my to do list and notes",
+  "tips for organizing digital clutter",
+  "best app for visual brainstorming",
+  "how to create a personal wiki",
+  "need a solution for managing recipes and meal planning",
+  "organizing travel plans and itinerary",
+  "managing client information and meeting notes",
+  "best app for creating study guides",
+  "how to take comprehensive notes quickly",
+  "looking for a cross platform note taking app",
+  "better way to track goals and progress",
+  "simple note taking for journaling",
+  "organizing my digital life advice needed",
+  "top productivity apps for busy professionals",
+  "managing notes and documents effectively",
+  "need to organize my thoughts",
+  "how do you stay organized",
+  "simplest way to make notes",
+  "managing information overload",
+  "tips to organise information",
+  "organizing data to plan a project",
+  "how to simplify workflow",
+  "tool to organize thoughts",
+  "making notes effectively",
+  "project tracking and note management",
+  "how to make notes simpler",
+]
+
 // Mock data for Reddit posts
 const MOCK_POSTS = [
   {
@@ -46,6 +99,37 @@ const GENERATED_REPLIES = {
   1: "Based on my experience growing a SaaS business, I'd recommend focusing on these three areas: 1) Content marketing - create valuable resources that address pain points in your niche, 2) Strategic partnerships with complementary tools your target users already use, and 3) Optimizing your onboarding process to improve activation rates. These approaches tend to have better ROI than paid acquisition when you're on a limited budget. Happy to share more specific tactics if you're interested!",
 }
 
+async function getQueries({ projectName, projectDescription }) {
+  const res = await fetch("/api/generate-queries", {
+    method: "POST",
+    headers: {
+      "Content-Type": "application/json",
+    },
+    body: JSON.stringify({
+      name: projectName,
+      description: projectDescription,
+    }),
+  })
+  const data = await res.json()
+  console.log("queries: ", data)
+  return data.data
+}
+
+async function getGoogleSearchResults({ query }) {
+  const res = await fetch("/api/google-custom-search", {
+    method: "POST",
+    headers: {
+      "Content-Type": "application/json",
+    },
+    body: JSON.stringify({
+      query: query,
+    }),
+  })
+  const data = await res.json()
+  console.log("queries: ", data)
+  return data
+}
+
 export default function RedditMarketingTool() {
   const [projectName, setProjectName] = useState("")
   const [projectDescription, setProjectDescription] = useState("")
@@ -61,31 +145,33 @@ export default function RedditMarketingTool() {
     setIsSearching(true)
 
     try {
-      // fetch a post request
-      const res = await fetch('/api/generate-queries', {
-        method: 'POST',
-        headers: {
-          'Content-Type': 'application/json',
-        },
-        body: JSON.stringify({
-          name: projectName,
-          description: projectDescription
-        })
+      // STEP 1: fetch a post request
+      const generatedQueries = await getQueries({
+        projectName: projectName,
+        projectDescription: projectDescription,
       })
-      const data = await res.json()
-      console.log('response: ', data)
+
+      // console.log(generatedQueries)
+      // return
+
+      // STEP 2: fetch search results
+      const randomIndex = Math.floor(Math.random() * generatedQueries.length)
+
+      // Get the random string using the random index
+      const randomString = generatedQueries[randomIndex]
+
+      const searchResults = await getGoogleSearchResults({
+        query: randomString,
+      })
+
+      console.log("searchResults: ", searchResults)
+      
+      setShowResults(true)
     } catch (error) {
       console.error("Error fetching Reddit posts:", error)
     } finally {
       setIsSearching(false)
     }
-    
-
-    // Simulate API call
-    // setTimeout(() => {
-    //   setIsSearching(false)
-    //   setShowResults(true)
-    // }, 1500)
   }
 
   const handleGenerateReply = (postId) => {
@@ -122,11 +208,16 @@ export default function RedditMarketingTool() {
         {/* Left Column - Fixed Form */}
         <div className="w-full lg:w-[400px] h-full p-6 border-r border-gray-200 dark:border-gray-800 flex flex-col bg-white dark:bg-[#171717] overflow-y-auto">
           <div className="flex-1">
-            <h2 className="text-xl font-semibold text-[#171717] dark:text-white mb-6">Project Details</h2>
+            <h2 className="text-xl font-semibold text-[#171717] dark:text-white mb-6">
+              Project Details
+            </h2>
 
             <div className="space-y-6">
               <div className="space-y-2">
-                <label htmlFor="projectName" className="text-sm font-medium text-gray-700 dark:text-gray-300">
+                <label
+                  htmlFor="projectName"
+                  className="text-sm font-medium text-gray-700 dark:text-gray-300"
+                >
                   Product Name
                 </label>
                 <Input
@@ -139,7 +230,10 @@ export default function RedditMarketingTool() {
               </div>
 
               <div className="space-y-2">
-                <label htmlFor="projectDescription" className="text-sm font-medium text-gray-700 dark:text-gray-300">
+                <label
+                  htmlFor="projectDescription"
+                  className="text-sm font-medium text-gray-700 dark:text-gray-300"
+                >
                   Product Description
                 </label>
                 <Textarea
@@ -161,13 +255,19 @@ export default function RedditMarketingTool() {
             >
               {isSearching ? "Searching..." : "Search Posts"}
             </Button>
-            <p className="text-xs text-gray-500 dark:text-gray-400 mt-2 text-center">2/3 daily limit</p>
+            <p className="text-xs text-gray-500 dark:text-gray-400 mt-2 text-center">
+              2/3 daily limit
+            </p>
           </div>
         </div>
 
         {/* Right Column - Scrollable Results */}
         <div className="flex-1 h-full overflow-y-auto p-6">
-          <motion.div initial={{ opacity: 0 }} animate={{ opacity: 1 }} transition={{ duration: 0.5 }}>
+          <motion.div
+            initial={{ opacity: 0 }}
+            animate={{ opacity: 1 }}
+            transition={{ duration: 0.5 }}
+          >
             <h2 className="text-2xl font-bold mb-6 text-[#171717] dark:text-white bg-[#f8f9fa] dark:bg-[#171717] py-2 z-10">
               Search Results
             </h2>
@@ -189,7 +289,9 @@ export default function RedditMarketingTool() {
                     <Card className="border-0 shadow-md overflow-hidden">
                       <CardContent className="p-6">
                         <div className="flex justify-between items-start">
-                          <h3 className="font-medium text-lg text-[#171717] dark:text-white mb-2">{post.title}</h3>
+                          <h3 className="font-medium text-lg text-[#171717] dark:text-white mb-2">
+                            {post.title}
+                          </h3>
                           <Button
                             variant="ghost"
                             size="icon"
@@ -199,7 +301,9 @@ export default function RedditMarketingTool() {
                           </Button>
                         </div>
 
-                        <p className="text-gray-600 dark:text-gray-300 text-sm mb-4">{post.content}</p>
+                        <p className="text-gray-600 dark:text-gray-300 text-sm mb-4">
+                          {post.content}
+                        </p>
 
                         <div className="flex justify-between items-center">
                           <div className="text-sm font-medium text-gray-500 dark:text-gray-400">
@@ -213,7 +317,7 @@ export default function RedditMarketingTool() {
                               className={cn(
                                 "bg-gray-100 hover:bg-gray-200 text-[#171717] border-gray-200",
                                 "dark:bg-gray-800 dark:hover:bg-gray-700 dark:text-white dark:border-gray-700",
-                                "transition-all duration-200",
+                                "transition-all duration-200"
                               )}
                               onClick={() => handleGenerateReply(post.id)}
                               disabled={generatingReply === post.id}
@@ -236,7 +340,9 @@ export default function RedditMarketingTool() {
                             <Separator className="my-4" />
 
                             <div className="flex justify-between items-center mb-2">
-                              <h4 className="font-medium text-[#171717] dark:text-white">Generated Reply</h4>
+                              <h4 className="font-medium text-[#171717] dark:text-white">
+                                Generated Reply
+                              </h4>
 
                               <Button
                                 variant="ghost"
@@ -271,7 +377,8 @@ export default function RedditMarketingTool() {
             ) : (
               <div className="flex flex-col items-center justify-center h-[400px] bg-gray-50 dark:bg-gray-800/50 rounded-lg border border-dashed border-gray-300 dark:border-gray-700">
                 <p className="text-gray-500 dark:text-gray-400 text-center max-w-xs">
-                  Enter your project details and click "Search Posts" to find relevant Reddit content
+                  Enter your project details and click "Search Posts" to find
+                  relevant Reddit content
                 </p>
               </div>
             )}
@@ -281,4 +388,3 @@ export default function RedditMarketingTool() {
     </>
   )
 }
-

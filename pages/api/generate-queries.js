@@ -64,7 +64,7 @@ export default async function handler(req, res) {
           ?.slice(0, count)
           .map((q) => q.replace(/"/g, "")) || []
 
-      return res.status(200).json({
+      return res.status(207).json({
         success: true,
         message:
           "AI response was not in expected format, extracted best guesses",

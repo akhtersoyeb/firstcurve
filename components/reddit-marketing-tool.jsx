@@ -634,32 +634,98 @@ const MOCK_GOOGLE_SEARCH_RESPONSE = {
 // Mock data for Reddit posts
 const MOCK_POSTS = [
   {
-    id: 1,
-    title: "What's the best way to grow my SaaS business?",
-    content:
-      "I've been running my SaaS for about 6 months now and growth has been steady but slow. I'm looking for strategies to accelerate user acquisition without burning through my limited marketing budget. Any advice from those who've been there?",
-    relevanceScore: 89,
+    title:
+      "Can you actually learn just by immersion right from the start? : r ...",
+    snippet:
+      "Dec 25, 2021 ... ... studying with immersion and start reading ... Of course reading and listening has been a major part of language learning curricula forever.",
+    link: "https://www.reddit.com/r/LearnJapanese/comments/rogpkd/can_you_actually_learn_just_by_immersion_right/",
+    relevance_score: 75,
+    relevance_reason:
+      "This post is asking about immersion as a learning technique and reading. Our product helps with language immersion through reading and provides translations, which could be a helpful solution for the user. Since it is the LearnJapanese subreddit, promotional opportunities must be tailored accordingly.",
   },
   {
-    id: 2,
-    title: "Need help with customer retention strategies",
-    content:
-      "Our acquisition numbers are good, but we're seeing a higher churn rate than expected. We offer a 14-day free trial, but many users don't convert to paid plans. What retention strategies have worked well for your SaaS products?",
-    relevanceScore: 92,
+    title: "Watching media and reading books isn't immersion : r ...",
+    snippet:
+      "Dec 31, 2020 ... Ultimately language learning is a multi-faceted and complicated process and a lot of simple terms don't easily convey those complexities, so I ...",
+    link: "https://www.reddit.com/r/languagelearning/comments/knwi5c/watching_media_and_reading_books_isnt_immersion/",
+    relevance_score: 60,
+    relevance_reason:
+      "The post discusses the complexities of language learning and immersion through reading. This indicates a potential audience interested in tools that simplify the process, making this somewhat relevant, though more indirectly than others.",
   },
   {
-    id: 3,
-    title: "Recommendations for SaaS pricing models?",
-    content:
-      "I'm in the process of revamping our pricing structure and would love to hear what's working for other founders. Currently using a tiered model, but considering usage-based pricing. What pricing models have you found most effective for sustainable growth?",
-    relevanceScore: 85,
+    title:
+      "App for immersive reading and bilingual books. : r/languagelearning",
+    snippet:
+      "Jun 10, 2024 ... App for immersive reading and bilingual books. · Translation Mode: Tap on sentences to see the corresponding parallel sentences. · Sync Mode: ...",
+    link: "https://www.reddit.com/r/languagelearning/comments/1dciazz/app_for_immersive_reading_and_bilingual_books/",
+    relevance_score: 80,
+    relevance_reason:
+      "This post directly discusses immersive reading and bilingual books, indicating a clear interest in the features our product offers. Since other apps are already mentioned, a promotional comment comparing functionalities would be natural.",
   },
   {
-    id: 4,
-    title: "How important is having a mobile app for your SaaS?",
-    content:
-      "We're debating whether to invest in building native mobile apps for our SaaS platform. Our web app is responsive, but some competitors have dedicated apps. Has anyone seen significant ROI from building mobile apps for their SaaS product?",
-    relevanceScore: 78,
+    title: "Start learning with immersion? : r/languagelearning",
+    snippet:
+      "Oct 20, 2023 ... I'm of the idea to start immersing as soon as possible using only content I want to immerse in (not graded readers for example)…usually within ...",
+    link: "https://www.reddit.com/r/languagelearning/comments/17bx8v4/start_learning_with_immersion/",
+    relevance_score: 85,
+    relevance_reason:
+      "The user is asking about starting language learning with immersion, which is a core element of our project. Mentioning how our project facilitates immersion with personalized translations would be very relevant and helpful, particularly for someone looking for content beyond graded readers.",
+  },
+  {
+    title:
+      "I've been told that 'immersive learning' is the most effective way, but ...",
+    snippet:
+      "Dec 31, 2023 ... Immersion is simply using your knowledge of the language, however little it may be, to consume media in that language and learn even more about ...",
+    link: "https://www.reddit.com/r/languagelearning/comments/18vc190/ive_been_told_that_immersive_learning_is_the_most/",
+    relevance_score: 90,
+    relevance_reason:
+      "This post explicitly asks what immersive learning is and how to find beginner-friendly resources, directly addressing the problem our project solves. A comment explaining our approach to making immersion accessible, providing translations and flashcards, would be extremely beneficial and well-received.",
+  },
+  {
+    title: "Reading English translation before or after immersion : r ...",
+    snippet:
+      "Aug 18, 2023 ... Unless the translation is made specifically for language learning, helping out language learners isn't particularly high on translators' ...",
+    link: "https://www.reddit.com/r/LearnJapanese/comments/15ue6a7/reading_english_translation_before_or_after/",
+    relevance_score: 70,
+    relevance_reason:
+      "The post discusses when to read English translations in relation to immersion. Given that our product provides in-context translations while reading, it could be relevant, but the context in LearnJapanese requires that any suggestions must be tailored appropriately.",
+  },
+  {
+    title: "Is it possible to learn a language only with immersion? : r ...",
+    snippet:
+      "Apr 15, 2020 ... ... learning languages. I've read and heard about people that learned a language just immersing themselves into it, without a textbook or any ...",
+    link: "https://www.reddit.com/r/languagelearning/comments/g1wmjb/is_it_possible_to_learn_a_language_only_with/",
+    relevance_score: 70,
+    relevance_reason:
+      "The post explores the possibilities of learning a language solely through immersion. Our product supports immersion through translated reading material, making this a relevant audience, but a promotional comment must acknowledge the debate of immersion vs. textbook learning.",
+  },
+  {
+    title: "The balance between Anki and Immersion : r/languagelearning",
+    snippet:
+      "Jun 3, 2022 ... Hi everyone! I've been reading a lot of posts and watching some videos about Anki and its usefulness in learning languages.",
+    link: "https://www.reddit.com/r/languagelearning/comments/v49mi5/the_balance_between_anki_and_immersion/",
+    relevance_score: 80,
+    relevance_reason:
+      "This post directly asks for the balance between Anki (flashcards) and Immersion, which is a perfect opportunity to share our product. We offer flashcards from immersion readings, which makes this a very relevant topic.",
+  },
+  {
+    title: "What actually is immersion? : r/languagelearning",
+    snippet:
+      "Oct 29, 2023 ... 15 votes, 18 comments. Does immersion just means watching/reading/listening and adding those words which you didn't understand to anki or ...",
+    link: "https://www.reddit.com/r/languagelearning/comments/17ivmwe/what_actually_is_immersion/",
+    relevance_score: 90,
+    relevance_reason:
+      "This post explicitly questions what immersion entails and mentions reading and vocabulary acquisition. Our product simplifies immersion through translated reading and flashcard creation, addressing the user's implicit needs. A promotional comment highlighting these features would be highly relevant.",
+  },
+  {
+    title:
+      "How to use LingQ or Pop Up Dictionaries / Reading Immersion : r ...",
+    snippet:
+      "Jul 16, 2024 ... This post needs to be stickied in how to read for language learning. I too have struggled with grasping a good idea as to how to approach ...",
+    link: "https://www.reddit.com/r/languagelearning/comments/1e52zva/how_to_use_lingq_or_pop_up_dictionaries_reading/",
+    relevance_score: 95,
+    relevance_reason:
+      "This post is ideal because it discusses reading immersion strategies. The user is asking for advice related to our specific niche and similar products already being discussed. This post presents a great opportunity to promote our language learning tool.",
   },
 ]
 
@@ -681,7 +747,7 @@ async function getQueries({ projectName, projectDescription }) {
   })
   const data = await res.json()
   console.log("queries: ", data)
-  return data.data
+  return data?.data
 }
 
 async function getGoogleSearchResults({ query }) {
@@ -696,7 +762,7 @@ async function getGoogleSearchResults({ query }) {
   })
   const data = await res.json()
   console.log("queries: ", data)
-  return data
+  return data?.data
 }
 
 async function analyzeAndFilterPosts({ posts, projectContext }) {
@@ -712,7 +778,23 @@ async function analyzeAndFilterPosts({ posts, projectContext }) {
   })
   const data = await res.json()
   console.log("filtered posts: ", data)
-  return data
+  return data?.data
+}
+
+async function getGeneratedReply({ post, projectContext }) {
+  const res = await fetch("/api/generate-reply", {
+    method: "POST",
+    headers: {
+      "Content-Type": "application/json",
+    },
+    body: JSON.stringify({
+      post: post,
+      projectContext: projectContext,
+    }),
+  })
+  const data = await res.json()
+  console.log("generated reply: ", data)
+  return data?.data
 }
 
 export default function RedditMarketingTool() {
@@ -727,6 +809,8 @@ export default function RedditMarketingTool() {
 
   const handleSearch = async () => {
     if (!projectName || !projectDescription) return
+    if (projectName.length > 50 || projectDescription.length > 2000) return
+
     setOrganicPosts([])
     setShowResults(false)
     setIsSearching(true)
@@ -755,17 +839,16 @@ export default function RedditMarketingTool() {
 
       // STEP 3: Filter using gemini
       const filteredPosts = await analyzeAndFilterPosts({
-        posts: searchResults?.data?.items,
+        posts: searchResults?.items,
         projectContext: `${projectName}: ${projectDescription}`,
       })
 
-      // MOCK STEP 3: 
-      // const filteredPosts = await analyzeAndFilterPosts({
-      //   posts: searchResults?.items,
-      //   projectContext: `${projectName}: ${projectDescription}`,
-      // })
+      // MOCK STEP 3:
+      // const filteredPosts = {
+      //   data: MOCK_POSTS
+      // }
       console.log("filtered posts: ", filteredPosts)
-      setOrganicPosts(filteredPosts?.data)
+      setOrganicPosts(filteredPosts)
       setShowResults(true)
     } catch (error) {
       console.error("Error fetching Reddit posts:", error)
@@ -774,27 +857,28 @@ export default function RedditMarketingTool() {
     }
   }
 
-  const handleGenerateReply = (postId) => {
-    if (generatedReplies[postId]) return
+  const handleGenerateReply = async (post) => {
+    if (generatedReplies[post?.link]) return
 
-    setGeneratingReply(postId)
+    setGeneratingReply(post?.link)
 
-    // Simulate API call
-    setTimeout(() => {
-      setGeneratingReply(null)
-      setGeneratedReplies((prev) => ({
-        ...prev,
-        [postId]:
-          "Based on my experience, I'd recommend focusing on building strong relationships with your early users. Personalized onboarding calls, responsive support, and regularly soliciting feedback can significantly improve retention. Consider implementing a customer success program that proactively reaches out at key moments in the user journey. Also, analyze your churn data to identify common drop-off points and address those specific pain points in your product.",
-      }))
-    }, 2000)
+    const generatedReply = await getGeneratedReply({
+      post: post,
+      projectContext: `${projectName}: ${projectDescription}`,
+    })
+
+    setGeneratedReplies((prev) => ({
+      ...prev,
+      [post?.link]: generatedReply
+    }))
+    setGeneratingReply(null)
   }
 
-  const handleCopyReply = (postId) => {
-    if (!generatedReplies[postId]) return
+  const handleCopyReply = (postLink) => {
+    if (!generatedReplies[postLink]) return
 
-    navigator.clipboard.writeText(generatedReplies[postId])
-    setCopiedReply(postId)
+    navigator.clipboard.writeText(generatedReplies[postLink])
+    setCopiedReply(postLink)
 
     setTimeout(() => {
       setCopiedReply(null)
@@ -826,7 +910,21 @@ export default function RedditMarketingTool() {
                   value={projectName}
                   onChange={(e) => setProjectName(e.target.value)}
                   className="border-gray-300 dark:border-gray-700"
+                  maxLength={50}
                 />
+                <div className="flex justify-end">
+                  <span
+                    className={cn(
+                      "text-xs",
+                      projectName.length > 40
+                        ? "text-amber-500"
+                        : "text-gray-500",
+                      projectName.length >= 50 ? "text-red-500" : ""
+                    )}
+                  >
+                    {projectName.length}/50
+                  </span>
+                </div>
               </div>
 
               <div className="space-y-2">
@@ -841,8 +939,22 @@ export default function RedditMarketingTool() {
                   placeholder="Describe your product and target audience"
                   value={projectDescription}
                   onChange={(e) => setProjectDescription(e.target.value)}
-                  className="min-h-[200px] border-gray-300 dark:border-gray-700"
+                  className="min-h-[200px] max-h-[400px] border-gray-300 dark:border-gray-700"
+                  maxLength={2000}
                 />
+                <div className="flex justify-end">
+                  <span
+                    className={cn(
+                      "text-xs",
+                      projectDescription.length > 1800
+                        ? "text-amber-500"
+                        : "text-gray-500",
+                      projectDescription.length >= 2000 ? "text-red-500" : ""
+                    )}
+                  >
+                    {projectDescription.length}/2000
+                  </span>
+                </div>
               </div>
             </div>
           </div>
@@ -850,7 +962,13 @@ export default function RedditMarketingTool() {
           <div className="pt-6 mt-auto">
             <Button
               onClick={handleSearch}
-              disabled={isSearching || !projectName || !projectDescription}
+              disabled={
+                isSearching ||
+                !projectName ||
+                !projectDescription ||
+                projectName.length > 50 ||
+                projectDescription.length > 2000
+              }
               className="w-full bg-[#171717] hover:bg-[#2a2a2a] text-white dark:bg-primary dark:hover:bg-primary/90 h-12"
             >
               {isSearching ? "Searching..." : "Search Posts"}
@@ -913,7 +1031,7 @@ export default function RedditMarketingTool() {
                             Relevance Score: {post?.relevance_score}
                           </div>
 
-                          {/* {!generatedReplies[post?.link] && (
+                          {!generatedReplies[post?.link] && (
                             <Button
                               variant="outline"
                               size="sm"
@@ -922,7 +1040,7 @@ export default function RedditMarketingTool() {
                                 "dark:bg-gray-800 dark:hover:bg-gray-700 dark:text-white dark:border-gray-700",
                                 "transition-all duration-200"
                               )}
-                              onClick={() => handleGenerateReply(post?.link)}
+                              onClick={() => handleGenerateReply(post)}
                               disabled={generatingReply === post?.link}
                             >
                               {generatingReply === post?.link ? (
@@ -934,11 +1052,11 @@ export default function RedditMarketingTool() {
                                 </>
                               )}
                             </Button>
-                          )} */}
+                          )}
                         </div>
 
                         {/* Generated Reply Section */}
-                        {/* {generatedReplies[post?.link] && (
+                        {generatedReplies[post?.link] && (
                           <div className="mt-6">
                             <Separator className="my-4" />
 
@@ -950,10 +1068,10 @@ export default function RedditMarketingTool() {
                               <Button
                                 variant="ghost"
                                 size="sm"
-                                onClick={() => handleCopyReply(post.id)}
+                                onClick={() => handleCopyReply(post?.link)}
                                 className="text-gray-500 hover:text-gray-700 dark:text-gray-400 dark:hover:text-gray-200"
                               >
-                                {copiedReply === post.id ? (
+                                {copiedReply === post?.link ? (
                                   <>
                                     <Check className="h-4 w-4 mr-1" />
                                     Copied
@@ -971,7 +1089,7 @@ export default function RedditMarketingTool() {
                               {generatedReplies[post?.link]}
                             </p>
                           </div>
-                        )} */}
+                        )}
                       </CardContent>
                     </Card>
                   </motion.div>

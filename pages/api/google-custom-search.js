@@ -11,7 +11,6 @@ export default async function handler(req, res) {
   try {
     // Process the POST request data
     const data = req.body
-    console.log("data: ", data)
     if (!data?.query) {
       return res.status(400).json({
         error: "Validation error",
@@ -29,7 +28,6 @@ export default async function handler(req, res) {
     searchUrl.searchParams.append("q", data.query)
     searchUrl.searchParams.append("num", "10")
     searchUrl.searchParams.append("start", "1")
-    console.log(searchUrl.toString())
     // Make request to Google Search API
     const searchResponse = await fetch(searchUrl.toString())
     const searchData = await searchResponse.json()

@@ -13,7 +13,6 @@ export default async function handler(req, res) {
   try {
     // Process the POST request data
     const data = req.body
-    console.log("data: ", data)
     if (!data?.name || !data?.description) {
       return res.status(400).json({
         error: "Validation error",
@@ -65,9 +64,6 @@ export default async function handler(req, res) {
           ?.slice(0, count)
           .map((q) => q.replace(/"/g, "")) || []
 
-      console.log(
-        `Fallback: Extracted ${fallbackQueries.length} queries from text`
-      )
       return res.status(200).json({
         success: true,
         message:

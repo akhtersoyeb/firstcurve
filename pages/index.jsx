@@ -15,12 +15,17 @@ import Link from "next/link"
 export async function getServerSideProps(context) {
   const supabase = createClient(context)
 
-  const { data, error } = await supabase.auth.getUser()
+  const { data: userData, error: userError } = await supabase.auth.getUser()
+  const { data: profileData, error: profileError } = await supabase
+    .from('profiles')
+    .select('*')
+    .eq('id', userData.user.id)
+    .single()
 
-  if (data?.user) {
+  if (userData?.user) {
     return {
       redirect: {
-        destination: '/dashboard',
+        destination: profileData?.subscription_status === null ? "/checkout" : "/dashboard",
         permanent: false,
       },
     }

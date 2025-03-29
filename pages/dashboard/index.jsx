@@ -4,12 +4,35 @@ import { createClient as createClientServer } from "@/lib/supabase/server-props"
 export async function getServerSideProps(context) {
   const supabase = createClientServer(context)
 
-  const { data, error } = await supabase.auth.getUser()
+  const { data: userData, error: userError } = await supabase.auth.getUser()
+  const { data: profileData, error: profileError } = await supabase
+    .from('profiles')
+    .select('*')
+    .eq('id', userData.user.id)
+    .single()
 
-  if (error || !data?.user) {
+  if (userError || !userData?.user) {
     return {
       redirect: {
-        destination: "/",
+        destination: "/login",
+        permanent: false,
+      },
+    }
+  }
+
+  if (profileData?.subscription_id === null) {
+    return {
+      redirect: {
+        destination: "/checkout",
+        permanent: false,
+      },
+    }
+  }
+
+  if (profileData?.subscription_status === 'created') {
+    return {
+      redirect: {
+        destination: "/checkout?complete=false",
         permanent: false,
       },
     }
@@ -17,12 +40,13 @@ export async function getServerSideProps(context) {
 
   return {
     props: {
-      user: data.user,
+      user: userData.user,
+      profile: profileData
     },
   }
 }
 
-export default function DashboardIndexPage() {
+export default function DashboardIndexPage({user,profile}) {
   return (
     <main>
       <RedditMarketingTool />

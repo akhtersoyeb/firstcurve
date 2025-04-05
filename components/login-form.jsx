@@ -7,6 +7,7 @@ import { createClient } from "@/lib/supabase/component"
 import { useState } from "react"
 import Link from "next/link"
 import { toast } from "sonner"
+import { Loader2 } from "lucide-react"
 
 export function LoginForm({ className, ...props }) {
   const router = useRouter()
@@ -14,17 +15,20 @@ export function LoginForm({ className, ...props }) {
 
   const [email, setEmail] = useState("")
   const [password, setPassword] = useState("")
+  const [isLoggingIn, setIsLoggingIn] = useState(false)
 
   async function logIn(e) {
     e.preventDefault()
+    setIsLoggingIn(true)
     const { error } = await supabase.auth.signInWithPassword({
       email,
       password,
     })
     if (error) {
-      toast.error("Error signing up", {
-        description: error.message
+      toast.error("Error while login.", {
+        description: error.message,
       })
+      setIsLoggingIn(false)
       return
     }
     router.push("/dashboard")
@@ -71,10 +75,16 @@ export function LoginForm({ className, ...props }) {
             required
           />
         </div>
-        <Button type="submit" className="w-full">
-          Login
-        </Button>
-        <div className="after:border-border relative text-center text-sm after:absolute after:inset-0 after:top-1/2 after:z-0 after:flex after:items-center after:border-t">
+        {isLoggingIn ? (
+          <Button disabled>
+            <Loader2 className="animate-spin" />
+          </Button>
+        ) : (
+          <Button type="submit" className="w-full">
+            Login
+          </Button>
+        )}
+        {/* <div className="after:border-border relative text-center text-sm after:absolute after:inset-0 after:top-1/2 after:z-0 after:flex after:items-center after:border-t">
           <span className="bg-background text-muted-foreground relative z-10 px-2">
             Or
           </span>
@@ -87,7 +97,7 @@ export function LoginForm({ className, ...props }) {
             />
           </svg>
           Login with Google
-        </Button>
+        </Button> */}
       </div>
       <div className="text-center text-sm">
         Don&apos;t have an account?{" "}

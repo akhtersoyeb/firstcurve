@@ -7,8 +7,8 @@ import { Input } from "@/components/ui/input"
 import { Textarea } from "@/components/ui/textarea"
 import { cn } from "@/lib/utils"
 import { Separator } from "@/components/ui/separator"
-import Navbar from "@/components/user-navbar"
 import Link from "next/link"
+import { toast } from "sonner"
 
 const MOCK_QUERIES = [
   "best way to organize thoughts ideas",
@@ -746,7 +746,7 @@ async function getQueries({ projectName, projectDescription }) {
     }),
   })
   const data = await res.json()
-  console.log("queries: ", data)
+  // console.log("queries: ", data)
   return data?.data
 }
 
@@ -761,7 +761,10 @@ async function getGoogleSearchResults({ query }) {
     }),
   })
   const data = await res.json()
-  console.log("queries: ", data)
+  if (res.status === 429) {
+    toast.error("Maximum number of requests reached. Please try again next day.")
+    return []
+  }
   return data?.data
 }
 
@@ -837,6 +840,12 @@ export default function RedditMarketingTool() {
       // MOCK STEP 2:
       // const searchResults = MOCK_GOOGLE_SEARCH_RESPONSE
 
+      if (searchResults.length === 0) {
+        setOrganicPosts([])
+        setShowResults(false)
+        return
+      }
+
       // STEP 3: Filter using gemini
       const filteredPosts = await analyzeAndFilterPosts({
         posts: searchResults?.items,
@@ -887,13 +896,12 @@ export default function RedditMarketingTool() {
 
   return (
     <>
-      <Navbar />
       <div className="w-full h-screen bg-[#f8f9fa] dark:bg-[#171717] flex overflow-hidden pt-16">
         {/* Left Column - Fixed Form */}
         <div className="w-full lg:w-[400px] h-full p-6 border-r border-gray-200 dark:border-gray-800 flex flex-col bg-white dark:bg-[#171717] overflow-y-auto">
           <div className="flex-1">
             <h2 className="text-xl font-semibold text-[#171717] dark:text-white mb-6">
-              Project Details
+              Product Details
             </h2>
 
             <div className="space-y-6">
@@ -1098,7 +1106,7 @@ export default function RedditMarketingTool() {
             ) : (
               <div className="flex flex-col items-center justify-center h-[400px] bg-gray-50 dark:bg-gray-800/50 rounded-lg border border-dashed border-gray-300 dark:border-gray-700">
                 <p className="text-gray-500 dark:text-gray-400 text-center max-w-xs">
-                  Enter your project details and click "Search Posts" to find
+                  Enter your product details and click "Search Posts" to find
                   relevant Reddit content
                 </p>
               </div>

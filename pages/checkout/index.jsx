@@ -11,27 +11,22 @@ import { loadRazorpay } from "@/lib/razorpay/load"
 import { createClient as createClientServer } from "@/lib/supabase/server-props"
 import { createClient as createClientComponent } from "@/lib/supabase/component"
 import { useRouter } from "next/router"
+import { FlickeringGrid } from "@/components/magicui/flickering-grid"
 
 export async function getServerSideProps(context) {
   const supabase = createClientServer(context)
 
   const { data: userData, error: userError } = await supabase.auth.getUser()
   const { data: profileData, error: profileError } = await supabase
-    .from('profiles')
-    .select('*')
-    .eq('id', userData.user.id)
+    .from("profiles")
+    .select("*")
+    .eq("id", userData.user.id)
     .single()
 
-  if (userError || !userData?.user) {
-    return {
-      redirect: {
-        destination: "/",
-        permanent: false,
-      },
-    }
-  }
-  console.log('profileData', profileData)
-  if (profileData?.subscription_id && profileData?.subscription_status !== 'created') {
+  if (
+    profileData?.subscription_id &&
+    profileData?.subscription_status !== "created"
+  ) {
     return {
       redirect: {
         destination: "/dashboard",
@@ -48,13 +43,34 @@ export async function getServerSideProps(context) {
   }
 }
 
-export default function CheckoutPage({user, profile}) {
+export default function CheckoutPage({ user }) {
   const router = useRouter()
   const supabase = createClientComponent()
   const [isSubmitting, setIsSubmitting] = useState(false)
 
+  // const {data: {user}} = await supabase.auth.getUser()
+
+  const signOut = async () => {
+    try {
+      await supabase.auth.signOut()
+      router.push("/")
+      // toast({
+      //   title: "Signed out successfully",
+      //   description: "You have been signed out of your account."
+      // });
+    } catch (error) {
+      console.error("Error signing out:", error)
+      // toast({
+      //   title: "Error signing out",
+      //   description: error.message,
+      //   variant: "destructive"
+      // });
+    }
+  }
+
   const handleCheckoutButton = async () => {
     try {
+      setIsSubmitting(true)
       const res = await fetch(`/api/subscriptions/create`, {
         method: "POST",
       })
@@ -74,13 +90,24 @@ export default function CheckoutPage({user, profile}) {
       const options = {
         key: process.env.NEXT_PUBLIC_RAZORPAY_KEY_ID,
         subscription_id: subscription?.id,
-        name: "RedditPro",
-        description: "Thank you for choosing RedditPro.",
-        currency: 'USD',
+        name: "Firstcurve",
+        description: "Thank you for choosing Firstcurve.",
+        // currency: 'INR',
+        modal: {
+          ondismiss: function() {
+            
+            setIsSubmitting(false)
+          }
+        },
         handler: async (res) => {
           // update user with subscription id
-          const {razorpay_payment_id, razorpay_subscription_id, razorpay_signature} = res
+          const {
+            razorpay_payment_id,
+            razorpay_subscription_id,
+            razorpay_signature,
+          } = res
           try {
+            setIsSubmitting(true)
             await supabase
               .from("profiles")
               .update({
@@ -89,10 +116,12 @@ export default function CheckoutPage({user, profile}) {
               .eq("id", user.id)
               .select()
               .single()
-            router.push('/dashboard')
+            router.push("/dashboard")
           } catch (error) {
             console.error("Error updating subscription status:", error)
-            toast.error('Subscription update failed');
+            toast.error("Subscription update failed")
+          } finally {
+            setIsSubmitting(false)
           }
         },
       }
@@ -127,7 +156,7 @@ export default function CheckoutPage({user, profile}) {
           <Card className="bg-gray-100 dark:bg-gray-800 border-0 mb-8">
             <CardContent className="p-6">
               <div className="text-2xl font-bold text-[#171717] dark:text-white mb-4">
-                $10.00
+                INR 899
                 <span className="text-base font-normal text-gray-500 dark:text-gray-400">
                   /month
                 </span>
@@ -137,39 +166,55 @@ export default function CheckoutPage({user, profile}) {
                 <li className="flex items-start">
                   <Check className="h-5 w-5 text-green-500 mr-2 mt-0.5" />
                   <span className="text-gray-700 dark:text-gray-300">
-                    Unlimited Reddit post searches
+                    10 Product Searches Per Day
                   </span>
                 </li>
                 <li className="flex items-start">
                   <Check className="h-5 w-5 text-green-500 mr-2 mt-0.5" />
                   <span className="text-gray-700 dark:text-gray-300">
-                    AI-powered reply generation
+                    AI Opportunity Ratings
                   </span>
                 </li>
                 <li className="flex items-start">
                   <Check className="h-5 w-5 text-green-500 mr-2 mt-0.5" />
                   <span className="text-gray-700 dark:text-gray-300">
-                    Advanced analytics dashboard
+                    AI-Generated Replies
                   </span>
                 </li>
                 <li className="flex items-start">
                   <Check className="h-5 w-5 text-green-500 mr-2 mt-0.5" />
                   <span className="text-gray-700 dark:text-gray-300">
-                    Priority customer support
+                    Daily Updates
                   </span>
                 </li>
                 <li className="flex items-start">
                   <Check className="h-5 w-5 text-green-500 mr-2 mt-0.5" />
                   <span className="text-gray-700 dark:text-gray-300">
-                    Cancel anytime
+                    Fast Performance
+                  </span>
+                </li>
+                <li className="flex items-start">
+                  <Check className="h-5 w-5 text-green-500 mr-2 mt-0.5" />
+                  <span className="text-gray-700 dark:text-gray-300">
+                    Priority Support
                   </span>
                 </li>
               </ul>
 
               <p className="text-sm text-gray-600 dark:text-gray-400">
-                By subscribing, you agree to our Terms of Service and Privacy
-                Policy. Your subscription will automatically renew each month
-                until canceled.
+                By subscribing, you agree to our{" "}
+                <a
+                  className="underline"
+                  href="/terms-of-service"
+                  target="blank"
+                >
+                  Terms of Service
+                </a>{" "}
+                and{" "}
+                <a href="/privacy-policy" className="underline" target="blank">
+                  Privacy Policy
+                </a>
+                .
               </p>
             </CardContent>
           </Card>
@@ -195,29 +240,34 @@ export default function CheckoutPage({user, profile}) {
             </span>
           </div>
           <div className="text-center mt-6">
-            <Link
-              href="#"
-              className="text-sm text-gray-600 dark:text-gray-400 hover:text-[#171717] dark:hover:text-white transition-colors"
+            <Button 
+              onClick={signOut}
+              variant={'link'}
+                className="text-sm text-gray-600 dark:text-gray-400 hover:text-[#171717] dark:hover:text-white transition-colors"
             >
               Want to login from another account?
-            </Link>
+            </Button>
           </div>
         </motion.div>
       </div>
 
       {/* Right Column - Image */}
-      <div className="hidden md:block w-1/2 bg-gray-50 dark:bg-gray-900 relative">
-        <div className="absolute inset-0 flex items-center justify-center p-12">
-          <Image
-            src="/placeholder.svg"
-            alt="RedditPro Premium Features"
-            width={600}
-            height={600}
-            className="max-w-full h-auto object-cover rounded-lg shadow-lg"
-            priority
-          />
-        </div>
+      {/* <div className="hidden md:block w-1/2 bg-gray-50 dark:bg-gray-900 relative">
+        <div className="absolute inset-0 flex items-center justify-center p-12"> */}
+      <div className="relative h-svh w-1/2 overflow-hidden rounded-lg">
+        <FlickeringGrid
+          className="absolute inset-0 z-0 size-full"
+          squareSize={4}
+          gridGap={6}
+          color="#6B7280"
+          maxOpacity={0.5}
+          flickerChance={0.1}
+          // height={800}
+          // width={800}
+        />
       </div>
+      {/* </div>
+      </div> */}
     </div>
   )
 }

@@ -7,6 +7,7 @@ import { createClient } from "@/lib/supabase/component"
 import { useState } from "react"
 import Link from "next/link"
 import { toast } from "sonner"
+import { Loader2 } from "lucide-react"
 
 export function SignupForm({ className, ...props }) {
   const router = useRouter()
@@ -14,22 +15,25 @@ export function SignupForm({ className, ...props }) {
 
   const [email, setEmail] = useState("")
   const [password, setPassword] = useState("")
+  const [isSigningUp, setIsSigningUp] = useState(false)
 
   async function signUp(e) {
     e.preventDefault()
-    const {error} = await supabase.auth.signUp({
+    setIsSigningUp(true)
+    const { error } = await supabase.auth.signUp({
       email,
       password,
     })
 
     if (error) {
       toast.error("Error signing up", {
-        description: error.message
+        description: error.message,
       })
+      setIsSigningUp(false)
       return
     }
 
-    router.push('/dashboard')
+    router.push("/dashboard")
   }
 
   return (
@@ -74,10 +78,16 @@ export function SignupForm({ className, ...props }) {
             required
           />
         </div>
-        <Button type="submit" className="w-full">
-          Sign Up
-        </Button>
-        <div className="after:border-border relative text-center text-sm after:absolute after:inset-0 after:top-1/2 after:z-0 after:flex after:items-center after:border-t">
+        {isSigningUp ? (
+          <Button disabled>
+            <Loader2 className="animate-spin" />
+          </Button>
+        ) : (
+          <Button type="submit" className="w-full">
+            Sign Up
+          </Button>
+        )}
+        {/* <div className="after:border-border relative text-center text-sm after:absolute after:inset-0 after:top-1/2 after:z-0 after:flex after:items-center after:border-t">
           <span className="bg-background text-muted-foreground relative z-10 px-2">
             Or
           </span>
@@ -90,7 +100,7 @@ export function SignupForm({ className, ...props }) {
             />
           </svg>
           Sign Up with Google
-        </Button>
+        </Button> */}
       </div>
       <div className="text-center text-sm">
         Already have an account?{" "}

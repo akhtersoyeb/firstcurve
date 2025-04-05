@@ -1,121 +1,71 @@
-import Link from "next/link";
+import Link from "next/link"
 
 export default function PublicFooter() {
   return (
-    <footer
-      className="border-t py-12 bg-muted/20"
-    >
-      <div className="container mx-auto grid grid-cols-2 md:grid-cols-4 gap-8">
-        <div>
-          <h3 className="font-semibold mb-4">Product</h3>
-          <ul className="space-y-2">
-            <li>
-              <Link
-                href="/product"
-                className="text-sm text-muted-foreground hover:text-foreground transition-colors"
-              >
-                Features
-              </Link>
-            </li>
-            <li>
-              <Link
-                href="/pricing"
-                className="text-sm text-muted-foreground hover:text-foreground transition-colors"
-              >
-                Pricing
-              </Link>
-            </li>
-          </ul>
+    <footer className="border-t bg-background">
+      <div className="container mx-auto py-8 md:py-12">
+        <div className="grid grid-cols-2 md:grid-cols-4 gap-8">
+          <div className="col-span-2 md:col-span-1">
+            <Link href="/" className="flex items-center space-x-2">
+              <span className="text-xl font-bold bg-gradient-to-r from-purple-600 to-cyan-500 bg-clip-text text-transparent">
+                Firstcurve
+              </span>
+            </Link>
+            <p className="mt-4 text-sm text-muted-foreground">
+              AI-powered organic marketing for your products and services.
+            </p>
+          </div>
+          <div>
+            <h3 className="text-sm font-medium mb-4">Product</h3>
+            <ul className="space-y-3 text-sm">
+              <li>
+                <Link href="/pricing" className="text-muted-foreground hover:text-foreground transition-colors">
+                  Pricing
+                </Link>
+              </li>
+              <li>
+                <Link href="/blog" className="text-muted-foreground hover:text-foreground transition-colors">
+                  Blog
+                </Link>
+              </li>
+            </ul>
+          </div>
+          <div>
+            <h3 className="text-sm font-medium mb-4">Company</h3>
+            <ul className="space-y-3 text-sm">
+              <li>
+                <Link href="/privacy-policy" className="text-muted-foreground hover:text-foreground transition-colors">
+                  Privacy Policy
+                </Link>
+              </li>
+              <li>
+                <Link href="/terms-of-service" className="text-muted-foreground hover:text-foreground transition-colors">
+                  Terms of Service
+                </Link>
+              </li>
+            </ul>
+          </div>
+          <div>
+            <h3 className="text-sm font-medium mb-4">Support</h3>
+            <ul className="space-y-3 text-sm">
+              <li>
+                <Link href="/contact" className="text-muted-foreground hover:text-foreground transition-colors">
+                  Contact
+                </Link>
+              </li>
+              <li>
+                <Link href="/forgot-password" className="text-muted-foreground hover:text-foreground transition-colors">
+                  Reset Password
+                </Link>
+              </li>
+            </ul>
+          </div>
         </div>
-
-        <div>
-          <h3 className="font-semibold mb-4">Company</h3>
-          <ul className="space-y-2">
-            <li>
-              <Link
-                href="/about"
-                className="text-sm text-muted-foreground hover:text-foreground transition-colors"
-              >
-                About
-              </Link>
-            </li>
-            <li>
-              <Link
-                href="/blog"
-                className="text-sm text-muted-foreground hover:text-foreground transition-colors"
-              >
-                Blog
-              </Link>
-            </li>
-            <li>
-              <Link
-                href="/contact"
-                className="text-sm text-muted-foreground hover:text-foreground transition-colors"
-              >
-                Contact
-              </Link>
-            </li>
-          </ul>
+        <div className="mt-8 pt-8 border-t text-center text-sm text-muted-foreground">
+          <p>© {new Date().getFullYear()} Firstcurve. All rights reserved.</p>
         </div>
-
-        <div>
-          <h3 className="font-semibold mb-4">Resources</h3>
-          <ul className="space-y-2">
-            <li>
-              <Link
-                href="/faq"
-                className="text-sm text-muted-foreground hover:text-foreground transition-colors"
-              >
-                FAQ
-              </Link>
-            </li>
-            <li>
-              <Link
-                href="/roadmap"
-                className="text-sm text-muted-foreground hover:text-foreground transition-colors"
-              >
-                Roadmap
-              </Link>
-            </li>
-            <li>
-              <Link
-                href="/feedback"
-                className="text-sm text-muted-foreground hover:text-foreground transition-colors"
-              >
-                Feedback
-              </Link>
-            </li>
-          </ul>
-        </div>
-
-        <div>
-          <h3 className="font-semibold mb-4">Legal</h3>
-          <ul className="space-y-2">
-            <li>
-              <Link
-                href="/privacy"
-                className="text-sm text-muted-foreground hover:text-foreground transition-colors"
-              >
-                Privacy Policy
-              </Link>
-            </li>
-            <li>
-              <Link
-                href="/terms"
-                className="text-sm text-muted-foreground hover:text-foreground transition-colors"
-              >
-                Terms of Service
-              </Link>
-            </li>
-          </ul>
-        </div>
-      </div>
-
-      <div className="container mx-auto mt-8 pt-8 border-t text-center">
-        <p className="text-sm text-muted-foreground">
-          &copy; {new Date().getFullYear()} RedditMarketer. All rights reserved.
-        </p>
       </div>
     </footer>
   )
 }
+

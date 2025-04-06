@@ -11,13 +11,12 @@ export async function middleware(req) {
   const {
     data: session,
   } = await supabase.auth.getUser()
-  console.log(session)
   
   // Get the pathname from the URL
   const { pathname } = req.nextUrl
   
   // Define private routes that require authentication
-  const privateRoutes = ['/dashboard', '/checkout']
+  const privateRoutes = ['/dashboard', '/checkout', '/profile', '/billing']
   
   // Define routes that require subscription check
   const subscriptionRoutes = ['/dashboard']
@@ -32,7 +31,6 @@ export async function middleware(req) {
   
   // Redirect to login if accessing private route without authentication
   if (privateRoutes.includes(pathname) && !session?.user) {
-    console.log('pathname: ', pathname)
     return NextResponse.redirect(new URL('/login', req.url))
   }
   
@@ -46,12 +44,12 @@ export async function middleware(req) {
       .single()
     
     // Redirect if subscription check fails
-    if (!profileData?.subscription_status || profileData?.subscription_status === 'created') {
+    if (pathname !== '/checkout' && (!profileData?.subscription_status || profileData?.subscription_status === 'created')) {
       return NextResponse.redirect(new URL('/checkout', req.url))
     }
 
-    if (profileData.subscription_status !== 'active') {
-      return NextResponse.redirect(new URL('/subscription-required', req.url))
+    if (profileData.subscription_status !== 'active' && pathname !== '/billing') {
+      return NextResponse.redirect(new URL('/billing', req.url))
     }
   }
   
@@ -67,5 +65,7 @@ export const config = {
     // authenticated only routes
     '/dashboard/:path*',
     '/checkout/:path*',
+    '/profile/:path*',
+    '/billing/:path*'
   ],
 }

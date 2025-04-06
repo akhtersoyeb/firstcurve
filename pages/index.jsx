@@ -166,7 +166,7 @@ export default function LandingPage() {
                 <div className="mx-auto">
                   <Safari
                     mode="default"
-                    imageSrc={"/1200x700.png"}
+                    imageSrc={"/frame-2.png"}
                     url="firstcurve.in"
                     className="size-full"
                     width={1200}

@@ -15,10 +15,10 @@ const routes = [
     href: "/pricing",
     label: "Pricing",
   },
-  {
-    href: "/blog",
-    label: "Blog",
-  },
+  // {
+  //   href: "/blog",
+  //   label: "Blog",
+  // },
 ]
 
 export default function PublicNavbar() {
@@ -55,7 +55,7 @@ export default function PublicNavbar() {
               Log in
             </Button>
           </Link>
-          <Link href="/signup">
+          <Link href="/sign-up">
             <Button size="sm">Get Started</Button>
           </Link>
         </div>
@@ -94,7 +94,7 @@ export default function PublicNavbar() {
                 >
                   Log in
                 </Link>
-                <Link href="/signup" onClick={() => setIsOpen(false)}>
+                <Link href="/sign-up" onClick={() => setIsOpen(false)}>
                   <Button className="w-full">Get Started</Button>
                 </Link>
               </nav>

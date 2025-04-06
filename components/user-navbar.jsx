@@ -14,18 +14,17 @@ import { useEffect, useState } from "react"
 
 export default function UserNavbar() {
   const router = useRouter()
-  const pathname = usePathname()
   const supabase = createClient()
 
   const [user, setUser] = useState(null)
 
   useEffect(() => {
     const fetchUser = async () => {
-      const { data, error } = await createClient().auth.getSession()
+      const { data, error } = await supabase.auth.getUser()
       if (error) {
         console.error(error)
       }
-      setUser(data?.session?.user)
+      setUser(data?.user)
     }
     fetchUser()
   }, [])
@@ -48,7 +47,7 @@ export default function UserNavbar() {
     }
   }
   return (
-    <header className="fixed top-0 left-0 right-0 h-16 border-b border-gray-200 dark:border-gray-800 bg-white dark:bg-[#171717] z-5 px-6">
+    <header className="fixed top-0 left-0 right-0 h-16 border-b border-gray-200 bg-background/95 backdrop-blur supports-[backdrop-filter]:bg-background/60 z-5 px-6">
       <div className="mx-auto flex h-16 items-center justify-between">
         <div className="flex items-center gap-6 md:gap-10">
           <Link href="/dashboard" className="flex items-center space-x-2">
@@ -69,12 +68,12 @@ export default function UserNavbar() {
             </DropdownMenuTrigger>
             <DropdownMenuContent className="w-56">
               <DropdownMenuItem asChild>
-                <Link href={"/profile"}>Profile</Link>
+                {/* <Link href={"/profile"}>Profile</Link> */}
               </DropdownMenuItem>
               <DropdownMenuItem asChild>
                 <Link href={"/billing"}>Billing</Link>
               </DropdownMenuItem>
-              <DropdownMenuSeparator />
+              {/* <DropdownMenuSeparator /> */}
               <DropdownMenuItem asChild>
                 <Link href={"/contact-us"}>Contact Us</Link>
               </DropdownMenuItem>

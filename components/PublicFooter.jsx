@@ -49,7 +49,7 @@ export default function PublicFooter() {
             <h3 className="text-sm font-medium mb-4">Support</h3>
             <ul className="space-y-3 text-sm">
               <li>
-                <Link href="/contact" className="text-muted-foreground hover:text-foreground transition-colors">
+                <Link href="/contact-us" className="text-muted-foreground hover:text-foreground transition-colors">
                   Contact
                 </Link>
               </li>

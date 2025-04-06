@@ -369,7 +369,7 @@ export default function PricingPage() {
                       per month
                     </div>
                   </div>
-                  <Link href="/signup">
+                  <Link href="/sign-up">
                     <Button size="lg" className="rounded-full px-8">
                       Get Started
                       <ArrowRight className="ml-2 h-4 w-4" />

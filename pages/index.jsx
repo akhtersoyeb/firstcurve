@@ -20,6 +20,7 @@ import {
   BarChart3,
 } from "lucide-react"
 import Link from "next/link"
+import HeroVideoDialog from "@/components/magicui/hero-video-dialog";
 
 export async function getServerSideProps(context) {
   const supabase = createClient(context)
@@ -257,12 +258,12 @@ export default function LandingPage() {
                       Our AI finds Reddit posts where your product can be a
                       perfect solution.
                     </p>
-                    <div className="mt-auto pt-4 border-t">
-                      <div className="flex items-center text-sm text-primary font-medium">
-                        <span>Learn more</span>
-                        <ChevronRight className="h-4 w-4 ml-1" />
-                      </div>
-                    </div>
+                    {/*<div className="mt-auto pt-4 border-t">*/}
+                    {/*  <div className="flex items-center text-sm text-primary font-medium">*/}
+                    {/*    <span>Learn more</span>*/}
+                    {/*    <ChevronRight className="h-4 w-4 ml-1" />*/}
+                    {/*  </div>*/}
+                    {/*</div>*/}
                   </div>
                 </div>
 
@@ -279,12 +280,12 @@ export default function LandingPage() {
                       Each post is rated by our AI to help you focus on the best
                       opportunities.
                     </p>
-                    <div className="mt-auto pt-4 border-t">
-                      <div className="flex items-center text-sm text-primary font-medium">
-                        <span>Learn more</span>
-                        <ChevronRight className="h-4 w-4 ml-1" />
-                      </div>
-                    </div>
+                    {/*<div className="mt-auto pt-4 border-t">*/}
+                    {/*  <div className="flex items-center text-sm text-primary font-medium">*/}
+                    {/*    <span>Learn more</span>*/}
+                    {/*    <ChevronRight className="h-4 w-4 ml-1" />*/}
+                    {/*  </div>*/}
+                    {/*</div>*/}
                   </div>
                 </div>
 
@@ -301,12 +302,12 @@ export default function LandingPage() {
                       Generate authentic, helpful responses that naturally
                       promote your product.
                     </p>
-                    <div className="mt-auto pt-4 border-t">
-                      <div className="flex items-center text-sm text-primary font-medium">
-                        <span>Learn more</span>
-                        <ChevronRight className="h-4 w-4 ml-1" />
-                      </div>
-                    </div>
+                    {/*<div className="mt-auto pt-4 border-t">*/}
+                    {/*  <div className="flex items-center text-sm text-primary font-medium">*/}
+                    {/*    <span>Learn more</span>*/}
+                    {/*    <ChevronRight className="h-4 w-4 ml-1" />*/}
+                    {/*  </div>*/}
+                    {/*</div>*/}
                   </div>
                 </div>
               </div>
@@ -317,20 +318,34 @@ export default function LandingPage() {
           <section className="py-20 bg-muted/30">
             <div className="container mx-auto px-4 md:px-6">
               <div className="grid grid-cols-1 lg:grid-cols-2 gap-12 items-center">
-                <div className="order-2 lg:order-1">
-                  <div className="relative">
-                    <div className="absolute -inset-1 bg-gradient-to-r from-purple-500 to-cyan-500 rounded-xl blur-lg opacity-25"></div>
-                    <div className="relative rounded-xl overflow-hidden border shadow-xl">
-                      <img
-                        src="/placeholder.svg?height=600&width=800"
-                        alt="Product Demo"
-                        className="w-full"
-                      />
-                    </div>
-                  </div>
-                </div>
+                <HeroVideoDialog
+                    className="block"
+                    animationStyle="from-center"
+                    videoSrc="https://www.loom.com/embed/7dca29fc2255477e919c6d936e5f4cdf?sid=d432cd1b-e0d4-41d0-8fef-e47a73821d11"
+                    thumbnailSrc="https://cdn.loom.com/sessions/thumbnails/7dca29fc2255477e919c6d936e5f4cdf-40f1a1c1d3ad6793-full-play.gif"
+                    thumbnailAlt="Hero Video"
+                />
+                {/*<div style="position: relative; padding-bottom: 56.25%; height: 0;">*/}
+                {/*  <iframe*/}
+                {/*      src="https://www.loom.com/embed/7dca29fc2255477e919c6d936e5f4cdf?sid=d432cd1b-e0d4-41d0-8fef-e47a73821d11"*/}
+                {/*      frameBorder="0" webkitallowfullscreen mozallowfullscreen*/}
+                {/*      allowFullScreen style="position: absolute; top: 0; left: 0; width: 100%; height: 100%;"></iframe>*/}
+                {/*</div>*/}
+                {/*<div className="order-2 lg:order-1">*/}
+                {/*  <div className="relative">*/}
+                {/*    <div className="absolute -inset-1 bg-gradient-to-r from-purple-500 to-cyan-500 rounded-xl blur-lg opacity-25"></div>*/}
+                {/*    <div className="relative rounded-xl overflow-hidden border shadow-xl">*/}
+                {/*      <img*/}
+                {/*        src="/placeholder.svg?height=600&width=800"*/}
+                {/*        alt="Product Demo"*/}
+                {/*        className="w-full"*/}
+                {/*      />*/}
+                {/*    </div>*/}
+                {/*  </div>*/}
+                {/*</div>*/}
                 <div className="order-1 lg:order-2 flex flex-col space-y-6">
-                  <div className="inline-flex items-center rounded-full border px-2.5 py-0.5 text-xs font-semibold transition-colors focus:outline-none focus:ring-2 focus:ring-ring focus:ring-offset-2 text-foreground w-fit">
+                  <div
+                      className="inline-flex items-center rounded-full border px-2.5 py-0.5 text-xs font-semibold transition-colors focus:outline-none focus:ring-2 focus:ring-ring focus:ring-offset-2 text-foreground w-fit">
                     PRODUCT SHOWCASE
                   </div>
                   <h2 className="text-3xl font-bold tracking-tighter md:text-4xl">
@@ -343,7 +358,7 @@ export default function LandingPage() {
                   <ul className="space-y-4">
                     <li className="flex items-start gap-2">
                       <div className="rounded-full bg-primary/10 p-1 mt-1">
-                        <CheckCircle className="h-4 w-4 text-primary" />
+                        <CheckCircle className="h-4 w-4 text-primary"/>
                       </div>
                       <div>
                         <p className="font-medium">Discover relevant posts</p>
@@ -354,7 +369,7 @@ export default function LandingPage() {
                     </li>
                     <li className="flex items-start gap-2">
                       <div className="rounded-full bg-primary/10 p-1 mt-1">
-                        <CheckCircle className="h-4 w-4 text-primary" />
+                        <CheckCircle className="h-4 w-4 text-primary"/>
                       </div>
                       <div>
                         <p className="font-medium">
@@ -367,7 +382,7 @@ export default function LandingPage() {
                     </li>
                     <li className="flex items-start gap-2">
                       <div className="rounded-full bg-primary/10 p-1 mt-1">
-                        <CheckCircle className="h-4 w-4 text-primary" />
+                        <CheckCircle className="h-4 w-4 text-primary"/>
                       </div>
                       <div>
                         <p className="font-medium">
@@ -384,7 +399,7 @@ export default function LandingPage() {
                     <Link href="/sign-up">
                       <Button size="lg" className="">
                         Try It
-                        <ArrowRight className="ml-2 h-4 w-4" />
+                        <ArrowRight className="ml-2 h-4 w-4"/>
                       </Button>
                     </Link>
                   </div>
@@ -397,7 +412,8 @@ export default function LandingPage() {
           <section id="how-it-works" className="py-20">
             <div className="container mx-auto px-4 md:px-6">
               <div className="flex flex-col items-center justify-center space-y-4 text-center mb-12">
-                <div className="inline-flex items-center rounded-full border px-2.5 py-0.5 text-xs font-semibold transition-colors focus:outline-none focus:ring-2 focus:ring-ring focus:ring-offset-2 text-foreground w-fit">
+                <div
+                    className="inline-flex items-center rounded-full border px-2.5 py-0.5 text-xs font-semibold transition-colors focus:outline-none focus:ring-2 focus:ring-ring focus:ring-offset-2 text-foreground w-fit">
                   HOW IT WORKS
                 </div>
                 <div className="space-y-2">

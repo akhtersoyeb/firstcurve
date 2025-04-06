@@ -1,4 +1,4 @@
-import { useState } from "react"
+import { useEffect, useState } from "react"
 import { motion } from "motion/react"
 import { Share2, Sparkles, Copy, Check } from "lucide-react"
 import { Button } from "@/components/ui/button"
@@ -734,6 +734,12 @@ const GENERATED_REPLIES = {
   1: "Based on my experience growing a SaaS business, I'd recommend focusing on these three areas: 1) Content marketing - create valuable resources that address pain points in your niche, 2) Strategic partnerships with complementary tools your target users already use, and 3) Optimizing your onboarding process to improve activation rates. These approaches tend to have better ROI than paid acquisition when you're on a limited budget. Happy to share more specific tactics if you're interested!",
 }
 
+async function getSearchCountForToday() {
+  const res = await fetch("/api/search-count-today")
+  const data = await res.json()
+  return data?.data
+}
+
 async function getQueries({ projectName, projectDescription }) {
   const res = await fetch("/api/generate-queries", {
     method: "POST",
@@ -809,6 +815,16 @@ export default function RedditMarketingTool() {
   const [generatingReply, setGeneratingReply] = useState(null)
   const [generatedReplies, setGeneratedReplies] = useState(GENERATED_REPLIES)
   const [copiedReply, setCopiedReply] = useState(null)
+  const [usedSearchCount, setUsedSearchCount] = useState(0)
+
+  useEffect(() => {
+    refreshSearchCount()
+  }, [])
+
+  async function refreshSearchCount() {
+    const newCount = await getSearchCountForToday()
+    setUsedSearchCount(newCount)
+  }
 
   const handleSearch = async () => {
     if (!projectName || !projectDescription) return
@@ -817,6 +833,12 @@ export default function RedditMarketingTool() {
     setOrganicPosts([])
     setShowResults(false)
     setIsSearching(true)
+
+    if (usedSearchCount === 10) {
+      toast.error("Maximum number of requests reached. Please try again next day.")
+      setIsSearching(false)
+      return
+    }
 
     try {
       // STEP 1: Generate queries and take a random query among them
@@ -857,6 +879,7 @@ export default function RedditMarketingTool() {
       //   data: MOCK_POSTS
       // }
       console.log("filtered posts: ", filteredPosts)
+      refreshSearchCount()
       setOrganicPosts(filteredPosts)
       setShowResults(true)
     } catch (error) {
@@ -982,7 +1005,7 @@ export default function RedditMarketingTool() {
               {isSearching ? "Searching..." : "Search Posts"}
             </Button>
             <p className="text-xs text-gray-500 dark:text-gray-400 mt-2 text-center">
-              2/3 daily limit
+              {usedSearchCount}/10 daily limit
             </p>
           </div>
         </div>

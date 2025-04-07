@@ -90,6 +90,7 @@ export default function CheckoutPage({ user }) {
         subscription_id: subscription?.id,
         name: "Firstcurve",
         description: "Thank you for choosing Firstcurve.",
+        image: "/logo.png",
         // currency: 'INR',
         modal: {
           ondismiss: function() {

@@ -15,10 +15,10 @@ const routes = [
     href: "/pricing",
     label: "Pricing",
   },
-  // {
-  //   href: "/blog",
-  //   label: "Blog",
-  // },
+  {
+    href: "/blog",
+    label: "Blog",
+  },
 ]
 
 export default function PublicNavbar() {

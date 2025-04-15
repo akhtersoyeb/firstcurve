@@ -1,39 +1,16 @@
 import PublicFooter from '@/components/PublicFooter';
 import PublicNavbar from '@/components/PublicNavbar';
-import { Metadata } from 'next';
 import Head from 'next/head';
 import Link from 'next/link';
 
-export const metadata = {
-    title: 'Growth Marketing Blog for SaaS Founders | Firstcurve',
-    description:
-        'Explore SEO tips, Reddit growth strategies, and actionable marketing guides for early-stage SaaS founders. Learn how to grow your startup with Firstcurve.',
-    alternates: {
-        canonical: 'https://firstcurve.in/blog',
-    },
-    openGraph: {
-        title: 'Growth Marketing Blog for SaaS Founders | Firstcurve',
-        description:
-            'Explore SEO tips, Reddit growth strategies, and actionable marketing guides for early-stage SaaS founders. Learn how to grow your startup with Firstcurve.',
-        url: 'https://firstcurve.in/blog',
-        type: 'website',
-        images: [
-            {
-                url: 'https://firstcurve.in/og-images/blog-index.png',
-                alt: 'Firstcurve Blog',
-            },
-        ],
-    },
-    twitter: {
-        card: 'summary_large_image',
-        title: 'Firstcurve Blog – Growth Tips for SaaS Founders',
-        description:
-            'Actionable growth tips, SEO tactics, and Reddit marketing playbooks for early-stage SaaS founders.',
-        images: ['https://firstcurve.in/og-images/blog-index.png'],
-    },
-};
-
 const blogs = [
+    {
+        title: '10 Proven Organic Growth Strategies for Early-Stage SaaS 🚀',
+        slug: 'organic-growth-strategies-for-saas',
+        date: 'April 16, 2025',
+        excerpt:
+            'Tired of burning cash on ads? Discover 10 organic growth strategies to grow your early-stage SaaS using SEO, Reddit, content marketing, and more.',
+    },
     {
         title: 'Reddit Growth Playbook for Early-Stage SaaS',
         slug: 'reddit-growth-playbook',

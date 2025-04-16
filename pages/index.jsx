@@ -11,12 +11,9 @@ import { createClient } from "@/lib/supabase/server-props"
 import { cn } from "@/lib/utils"
 import {
   ArrowRight,
-  BarChart,
   Search,
   MessageSquare,
-  Users,
   CheckCircle,
-  ChevronRight,
   BarChart3,
 } from "lucide-react"
 import Link from "next/link"

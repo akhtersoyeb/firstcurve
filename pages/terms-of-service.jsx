@@ -36,7 +36,7 @@ export default function TermsOfUsePage() {
 
           <h2 className="text-2xl font-semibold mt-6 mb-4">4. Subscription and Payment</h2>
           <p>
-            Firstcurve offers a subscription-based service at Rs. 899 INR per month. By subscribing to our service, you agree
+            Firstcurve offers a subscription-based service at Rs. 800 INR per month. By subscribing to our service, you agree
             to pay the monthly fee. Payments are processed securely through our payment processors.
           </p>
           <p className="mt-2">

@@ -1,5 +1,5 @@
 import { createClient } from "@/lib/supabase/component";
-import { useMutation } from "@tanstack/react-query";
+import { useMutation, useQuery } from "@tanstack/react-query";
 import { useRouter } from "next/router";
 import { toast } from "sonner";
 
@@ -29,6 +29,15 @@ export default function useAuth() {
         redirectTo: `${origin}/api/auth/callback/google`,
       },
     });
+  }
+
+  async function signOut() {
+    return await supabase.auth.signOut()
+  }
+
+  async function getUser() {
+    const { data: { user } } = await supabase.auth.getUser()
+    return user
   }
 
   const signUpWithEmailMutation = useMutation({
@@ -97,9 +106,40 @@ export default function useAuth() {
     },
   });
 
+  const signOutMutation = useMutation({
+    mutationFn: signOut,
+    onSuccess: (res) => {
+      console.log('res: ', res)
+      if (res?.error) {
+        toast.error(res.error.message, {
+          description: "Failed to logout",
+        });
+        return;
+      } else {
+        toast.success("Logout successful.");
+        router.push("/");
+      }
+        
+    },
+    onError: (error) => {
+      toast.error("Error while logout.", {
+        description:
+          error?.message ?? "Something went wrong. Please try again later.",
+      });
+      return;
+    },
+  });
+
+  const userQuery = useQuery({
+    queryKey: ["user"],
+    queryFn: getUser,
+  })
+
   return {
     signUpWithEmailMutation,
     signInWithEmailMutation,
-    signInWithGoogleMutation
+    signInWithGoogleMutation,
+    signOutMutation,
+    userQuery
   };
 }

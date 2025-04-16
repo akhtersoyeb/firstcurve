@@ -1,5 +1,5 @@
-import { Avatar, AvatarFallback, AvatarImage } from "@/components/ui/avatar"
-import { Button } from "@/components/ui/button"
+import { Avatar, AvatarFallback, AvatarImage } from "@/components/ui/avatar";
+import { Button } from "@/components/ui/button";
 import {
   Card,
   CardContent,
@@ -7,28 +7,14 @@ import {
   CardFooter,
   CardHeader,
   CardTitle,
-} from "@/components/ui/card"
-import { Input } from "@/components/ui/input"
-import { Label } from "@/components/ui/label"
-import UserNavbar from "@/components/user-navbar"
-import { createClient } from "@/lib/supabase/component"
-import { useEffect, useState } from "react"
+} from "@/components/ui/card";
+import { Input } from "@/components/ui/input";
+import { Label } from "@/components/ui/label";
+import UserNavbar from "@/components/user-navbar";
+import useAuth from "@/hooks/useAuth";
 
 export default function ProfilePage() {
-  const supabase = createClient()
-
-  const [user, setUser] = useState(null)
-
-  useEffect(() => {
-    const fetchUser = async () => {
-      const { data, error } = await supabase.auth.getUser()
-      if (error) {
-        console.error(error)
-      }
-      setUser(data?.user)
-    }
-    fetchUser()
-  }, [])
+  const { userQuery } = useAuth();
   return (
     <>
       <UserNavbar />
@@ -61,9 +47,11 @@ export default function ProfilePage() {
             <div className="flex items-center gap-4">
               <div>
                 <Avatar className="w-20 h-20">
-                  <AvatarImage src={user?.user_metadata?.avatar_url} />
+                  <AvatarImage
+                    src={userQuery?.data?.user_metadata?.avatar_url}
+                  />
                   <AvatarFallback>
-                    {user?.email.slice(0, 1).toUpperCase()}
+                    {userQuery?.data?.email.slice(0, 1).toUpperCase()}
                   </AvatarFallback>
                 </Avatar>
               </div>
@@ -74,7 +62,7 @@ export default function ProfilePage() {
                   disabled={true}
                   id="email"
                   type="email"
-                  defaultValue={user?.email}
+                  defaultValue={userQuery?.data?.email}
                 />
               </div>
             </div>
@@ -262,5 +250,5 @@ export default function ProfilePage() {
         </Tabs> */}
       </div>
     </>
-  )
+  );
 }

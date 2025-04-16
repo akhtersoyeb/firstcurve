@@ -21,28 +21,15 @@ import {
 } from "@/components/ui/alert-dialog"
 import { toast } from "sonner"
 import { useEffect, useState } from "react"
-import { Loader, Loader2 } from "lucide-react"
-import { createClient } from "@/lib/supabase/component"
+import { Loader2 } from "lucide-react"
 import Link from "next/link"
+import useAuth from "@/hooks/useAuth"
 
 export default function BillingPage() {
+  const { userQuery } = useAuth()
   const [isCancelling, setIsCancelling] = useState(false)
   const [isLoading, setIsLoading] = useState(false)
   const [subscriptionDetails, setSubscriptionDetails] = useState({})
-  const supabase = createClient()
-
-  const [user, setUser] = useState(null)
-
-  useEffect(() => {
-    const fetchUser = async () => {
-      const { data, error } = await supabase.auth.getUser()
-      if (error) {
-        console.error(error)
-      }
-      setUser(data?.user)
-    }
-    fetchUser()
-  }, [])
 
   useEffect(() => {
     getSubscriptionDetails()
@@ -115,7 +102,7 @@ export default function BillingPage() {
                   <div>
                     <h3 className="font-medium">Monthly Plan</h3>
                     <p className="text-sm text-muted-foreground mt-1">
-                      INR 899 billed monthly
+                      INR 800 billed monthly
                     </p>
                   </div>
                   <div className="bg-primary/10 text-primary px-3 py-1 rounded-full text-sm font-medium">
@@ -153,7 +140,7 @@ export default function BillingPage() {
               </AlertDialog>
             ) : (
               <div>
-                <p>Please check {user?.email} to activate your subscription.</p>
+                <p>Please check {userQuery?.data?.email} to activate your subscription.</p>
                 <Link className="underline" href={"/contact-us"}>
                   Contact Us
                 </Link>

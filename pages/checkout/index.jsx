@@ -10,6 +10,7 @@ import { createClient as createClientServer } from "@/lib/supabase/server-props"
 import { createClient as createClientComponent } from "@/lib/supabase/component"
 import { useRouter } from "next/router"
 import { FlickeringGrid } from "@/components/magicui/flickering-grid"
+import useAuth from "@/hooks/useAuth"
 
 export async function getServerSideProps(context) {
   const supabase = createClientServer(context)
@@ -43,28 +44,10 @@ export async function getServerSideProps(context) {
 
 export default function CheckoutPage({ user }) {
   const router = useRouter()
+  const { signOutMutation } = useAuth()
   const supabase = createClientComponent()
   const [isSubmitting, setIsSubmitting] = useState(false)
 
-  // const {data: {user}} = await supabase.auth.getUser()
-
-  const signOut = async () => {
-    try {
-      await supabase.auth.signOut()
-      router.push("/")
-      // toast({
-      //   title: "Signed out successfully",
-      //   description: "You have been signed out of your account."
-      // });
-    } catch (error) {
-      console.error("Error signing out:", error)
-      // toast({
-      //   title: "Error signing out",
-      //   description: error.message,
-      //   variant: "destructive"
-      // });
-    }
-  }
 
   const handleCheckoutButton = async () => {
     try {
@@ -155,7 +138,7 @@ export default function CheckoutPage({ user }) {
           <Card className="bg-gray-100 dark:bg-gray-800 border-0 mb-8">
             <CardContent className="p-6">
               <div className="text-2xl font-bold text-[#171717] dark:text-white mb-4">
-                INR 899
+                INR 800
                 <span className="text-base font-normal text-gray-500 dark:text-gray-400">
                   /month
                 </span>
@@ -240,7 +223,7 @@ export default function CheckoutPage({ user }) {
           </div>
           <div className="text-center mt-6">
             <Button 
-              onClick={signOut}
+              onClick={async () => await signOutMutation.mutateAsync()}
               variant={'link'}
                 className="text-sm text-gray-600 dark:text-gray-400 hover:text-[#171717] dark:hover:text-white transition-colors"
             >

@@ -1,126 +1,70 @@
-import { useState } from "react"
-import { motion } from "framer-motion"
-import { Check, Loader2, Lock } from "lucide-react"
+import { motion } from "framer-motion";
+import { Check, Loader2 } from "lucide-react";
 
-import { Button } from "@/components/ui/button"
-import { Card, CardContent } from "@/components/ui/card"
-import { toast } from "sonner"
-import { loadRazorpay } from "@/lib/razorpay/load"
-import { createClient as createClientServer } from "@/lib/supabase/server-props"
-import { createClient as createClientComponent } from "@/lib/supabase/component"
-import { useRouter } from "next/router"
-import { FlickeringGrid } from "@/components/magicui/flickering-grid"
-import useAuth from "@/hooks/useAuth"
+import { Button } from "@/components/ui/button";
+import { Card, CardContent } from "@/components/ui/card";
+import { toast } from "sonner";
+import { createClient as createClientServer } from "@/lib/supabase/server-props";
+import { useRouter } from "next/router";
+import { FlickeringGrid } from "@/components/magicui/flickering-grid";
+import useAuth from "@/hooks/useAuth";
+import useSubscription from "@/hooks/useSubscription";
+import { Skeleton } from "@/components/ui/skeleton";
 
-export async function getServerSideProps(context) {
-  const supabase = createClientServer(context)
+// export async function getServerSideProps(context) {
+//   const supabase = createClientServer(context)
 
-  const { data: userData, error: userError } = await supabase.auth.getUser()
-  const { data: profileData, error: profileError } = await supabase
-    .from("profiles")
-    .select("*")
-    .eq("id", userData.user.id)
-    .single()
+//   const { data: userData, error: userError } = await supabase.auth.getUser()
+//   const { data: profileData, error: profileError } = await supabase
+//     .from("profiles")
+//     .select("*")
+//     .eq("id", userData.user.id)
+//     .single();
 
-  if (
-    profileData?.subscription_id &&
-    profileData?.subscription_status !== "created"
-  ) {
-    return {
-      redirect: {
-        destination: "/dashboard",
-        permanent: false,
-      },
-    }
-  }
+//   if (
+//     profileData?.subscription_id &&
+//     profileData?.subscription_status
+//   ) {
+//     return {
+//       redirect: {
+//         destination: "/dashboard",
+//         permanent: false,
+//       },
+//     }
+//   }
 
-  return {
-    props: {
-      user: userData.user,
-      profile: profileData,
-    },
-  }
-}
+//   return {
+//     props: {}
+//   }
+// }
 
-export default function CheckoutPage({ user }) {
+export default function CheckoutPage() {
   const router = useRouter()
-  const { signOutMutation } = useAuth()
-  const supabase = createClientComponent()
-  const [isSubmitting, setIsSubmitting] = useState(false)
+  const { signOutMutation } = useAuth();
+  const { baseSubscriptionDetailsQuery, checkoutBasePlanMutation } =
+    useSubscription();
 
-
-  const handleCheckoutButton = async () => {
-    try {
-      setIsSubmitting(true)
-      const res = await fetch(`/api/subscriptions/create`, {
-        method: "POST",
-      })
-      const data = await res.json()
-
-      if (!res.ok) {
-        throw new Error(data.message ?? "Something went wrong at server side")
-      }
-
-      const subscription = data?.data
-      const isRazorpayLoaded = await loadRazorpay()
-
-      if (!isRazorpayLoaded) {
-        throw new Error("Failed to load razorpay script.")
-      }
-
-      const options = {
-        key: process.env.NEXT_PUBLIC_RAZORPAY_KEY_ID,
-        subscription_id: subscription?.id,
-        name: "Firstcurve",
-        description: "Thank you for choosing Firstcurve.",
-        image: "/logo.png",
-        // currency: 'INR',
-        modal: {
-          ondismiss: function() {
-            
-            setIsSubmitting(false)
-          }
-        },
-        handler: async (res) => {
-          // update user with subscription id
-          const {
-            razorpay_payment_id,
-            razorpay_subscription_id,
-            razorpay_signature,
-          } = res
-          try {
-            setIsSubmitting(true)
-            await supabase
-              .from("profiles")
-              .update({
-                subscription_status: "active",
-              })
-              .eq("id", user.id)
-              .select()
-              .single()
-            router.push("/dashboard")
-          } catch (error) {
-            console.error("Error updating subscription status:", error)
-            toast.error("Subscription update failed")
-          } finally {
-            setIsSubmitting(false)
-          }
-        },
-      }
-
-      const rzp1 = new window.Razorpay(options)
-      await rzp1.open()
-    } catch (error) {
-      console.error("Error creating subscription:", error)
-      toast.error("Failed to create subscription", {
-        description: error?.message ?? "Something went wrong",
-      })
+  if (router.query?.subscription_id && router.query?.status) {
+    if (router.query?.status === 'active') {
+      toast.success(
+        "Your subscription is active. You can now use the app.",
+        {
+          action: {
+            label: "Go to Dashboard",
+            onClick: () => router.push("/dashboard"),
+          },
+        }
+      );
+      router.push("/dashboard");
+    } else if (router.query?.status === 'failed') {
+      toast.error('Failed!', {
+        description: "Your subscription payment failed. Please try again."
+      });
     }
   }
 
   return (
     <div className="min-h-screen bg-[#f8f9fa] dark:bg-[#171717] flex flex-col md:flex-row">
-      {/* Left Column - Payment Form */}
       <div className="w-full md:w-1/2 p-6 md:p-12 flex flex-col h-svh justify-center">
         <motion.div
           initial={{ opacity: 0, y: 20 }}
@@ -129,7 +73,7 @@ export default function CheckoutPage({ user }) {
           className="max-w-md mx-auto w-full"
         >
           <h1 className="text-3xl font-bold text-[#171717] dark:text-white mb-2">
-            Payment
+            Checkout
           </h1>
           <p className="text-gray-600 dark:text-gray-300 mb-8">
             Complete your subscription by providing your payment details
@@ -137,13 +81,16 @@ export default function CheckoutPage({ user }) {
 
           <Card className="bg-gray-100 dark:bg-gray-800 border-0 mb-8">
             <CardContent className="p-6">
-              <div className="text-2xl font-bold text-[#171717] dark:text-white mb-4">
-                INR 800
-                <span className="text-base font-normal text-gray-500 dark:text-gray-400">
-                  /month
-                </span>
-              </div>
-
+              {baseSubscriptionDetailsQuery?.isLoading ? (
+                <Skeleton className="w-24 h-8 rounded-md bg-slate-200" />
+              ) : (
+                <div className="text-2xl font-bold text-[#171717] dark:text-white mb-4">
+                  $ {baseSubscriptionDetailsQuery?.data?.price?.price / 100}
+                  <span className="text-base font-normal text-gray-500 dark:text-gray-400">
+                    /month
+                  </span>
+                </div>
+              )}
               <ul className="space-y-2 mb-6">
                 <li className="flex items-start">
                   <Check className="h-5 w-5 text-green-500 mr-2 mt-0.5" />
@@ -201,11 +148,11 @@ export default function CheckoutPage({ user }) {
             </CardContent>
           </Card>
           <Button
-            onClick={handleCheckoutButton}
+            onClick={async () => checkoutBasePlanMutation.mutateAsync()}
             className="w-full h-12 bg-[#171717] hover:bg-[#2a2a2a] text-white dark:bg-primary dark:hover:bg-primary/90"
-            disabled={isSubmitting}
+            disabled={checkoutBasePlanMutation?.isPending}
           >
-            {isSubmitting ? (
+            {checkoutBasePlanMutation?.isPending ? (
               <span className="flex items-center">
                 <Loader2 className="animate-spin -ml-1 mr-2 h-4 w-4 text-white" />
                 Processing...
@@ -215,17 +162,11 @@ export default function CheckoutPage({ user }) {
             )}
           </Button>
 
-          <div className="flex items-center justify-center mt-4">
-            <Lock className="h-4 w-4 text-gray-500 mr-2" />
-            <span className="text-sm text-gray-500 dark:text-gray-400">
-              Secure payment powered by Razorpay
-            </span>
-          </div>
           <div className="text-center mt-6">
-            <Button 
+            <Button
               onClick={async () => await signOutMutation.mutateAsync()}
-              variant={'link'}
-                className="text-sm text-gray-600 dark:text-gray-400 hover:text-[#171717] dark:hover:text-white transition-colors"
+              variant={"link"}
+              className="text-sm text-gray-600 dark:text-gray-400 hover:text-[#171717] dark:hover:text-white transition-colors"
             >
               Want to login from another account?
             </Button>
@@ -233,9 +174,6 @@ export default function CheckoutPage({ user }) {
         </motion.div>
       </div>
 
-      {/* Right Column - Image */}
-      {/* <div className="hidden md:block w-1/2 bg-gray-50 dark:bg-gray-900 relative">
-        <div className="absolute inset-0 flex items-center justify-center p-12"> */}
       <div className="relative h-svh w-1/2 overflow-hidden rounded-lg">
         <FlickeringGrid
           className="absolute inset-0 z-0 size-full"
@@ -244,12 +182,8 @@ export default function CheckoutPage({ user }) {
           color="#6B7280"
           maxOpacity={0.5}
           flickerChance={0.1}
-          // height={800}
-          // width={800}
         />
       </div>
-      {/* </div>
-      </div> */}
     </div>
-  )
+  );
 }

@@ -18,28 +18,31 @@ import {
 } from "lucide-react"
 import Link from "next/link"
 import HeroVideoDialog from "@/components/magicui/hero-video-dialog";
+import useAuth from "@/hooks/useAuth"
+import UserNavbar from "@/components/user-navbar"
 
-export async function getServerSideProps(context) {
-  const supabase = createClient(context)
-  const {
-    data: { user },
-    error: userError,
-  } = await supabase.auth.getUser()
-  if (user) {
-    return {
-      redirect: {
-        destination: "/dashboard",
-        permanent: false,
-      },
-    }
-  }
+// export async function getServerSideProps(context) {
+//   const supabase = createClient(context)
+//   const {
+//     data: { user },
+//     error: userError,
+//   } = await supabase.auth.getUser()
+//   if (user) {
+//     return {
+//       redirect: {
+//         destination: "/dashboard",
+//         permanent: false,
+//       },
+//     }
+//   }
 
-  return {
-    props: {},
-  }
-}
+//   return {
+//     props: {},
+//   }
+// }
 
 export default function LandingPage() {
+  const { userQuery } = useAuth()
   const avatars = [
     {
       imageUrl: "https://avatars.githubusercontent.com/u/16860528",
@@ -99,7 +102,8 @@ export default function LandingPage() {
 
   return (
     <div className="flex min-h-screen flex-col">
-      <PublicNavbar />
+      {userQuery?.data?.id ? <UserNavbar /> : <PublicNavbar />}
+      {/* <PublicNavbar /> */}
       <main className="flex-1">
         <div className="flex flex-col min-h-screen">
           {/* Hero Section */}

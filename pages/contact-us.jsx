@@ -2,7 +2,6 @@ import PublicNavbar from "@/components/PublicNavbar"
 import UserNavbar from "@/components/user-navbar"
 
 import { useState } from "react"
-import { Button } from "@/components/ui/button"
 import {
   Card,
   CardContent,
@@ -10,27 +9,13 @@ import {
   CardHeader,
   CardTitle,
 } from "@/components/ui/card"
-import { Input } from "@/components/ui/input"
-import { Label } from "@/components/ui/label"
-import { Textarea } from "@/components/ui/textarea"
-import { CheckCircle, Mail, MapPin, Phone, Twitter } from "lucide-react"
-import { Alert, AlertDescription } from "@/components/ui/alert"
-import { createClient as createClientServer } from "@/lib/supabase/server-props"
+import { Mail, MapPin, Phone, Twitter } from "lucide-react"
 import Link from "next/link"
+import useAuth from "@/hooks/useAuth"
 
-export async function getServerSideProps(context) {
-  const supabase = createClientServer(context)
 
-  const { data: userData, error: userError } = await supabase.auth.getUser()
-
-  return {
-    props: {
-      user: userData.user,
-    },
-  }
-}
-
-export default function ContactUsPage({ user }) {
+export default function ContactUsPage() {
+  const { userQuery } = useAuth()
   const [formState, setFormState] = useState({
     name: "",
     email: "",
@@ -72,7 +57,7 @@ export default function ContactUsPage({ user }) {
 
   return (
     <>
-      {user ? <UserNavbar /> : <PublicNavbar />}
+      {userQuery?.data?.email ? <UserNavbar /> : <PublicNavbar />}
 
       <div className="container mx-auto py-10 pt-20">
         <div className="flex flex-col items-center text-center mb-12">

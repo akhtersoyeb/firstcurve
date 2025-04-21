@@ -32,7 +32,7 @@ export default function useSubscription() {
   async function checkoutBasePlan() {
     const origin = window.location.origin;
     const productId = process.env.NEXT_PUBLIC_DODO_PAYMENTS_BASE_PLAN_ID;
-    let base_url = `https://live.checkout.dodopayments.com/buy/${productId}`;
+    let base_url = `https://checkout.dodopayments.com/buy/${productId}`;
     if (process.env.NODE_ENV === "development") {
       base_url = `https://test.checkout.dodopayments.com/buy/${productId}`;
     }

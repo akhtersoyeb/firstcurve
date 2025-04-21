@@ -14,7 +14,7 @@ export default function UserNavbar() {
   const billingUrl =
     process.env.NODE_ENV === "development"
       ? `https://test.customer.dodopayments.com/login/bus_Pu24PPCJufCfoljmKe8QT`
-      : `https://live.customer.dodopayments.com/login/bus_Pu24PPCJufCfoljmKe8QT`;
+      : `https://customer.dodopayments.com/login/bus_Pu24PPCJufCfoljmKe8QT`;
 
   return (
     <header className="fixed top-0 left-0 right-0 h-16 border-b border-gray-200 bg-background/95 backdrop-blur supports-[backdrop-filter]:bg-background/60 z-5 px-6">

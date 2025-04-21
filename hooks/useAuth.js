@@ -1,11 +1,12 @@
 import { createClient } from "@/lib/supabase/component";
-import { useMutation, useQuery } from "@tanstack/react-query";
+import { useMutation, useQuery, useQueryClient } from "@tanstack/react-query";
 import { useRouter } from "next/router";
 import { toast } from "sonner";
 
 export default function useAuth() {
   const router = useRouter();
   const supabase = createClient();
+  const queryClient = useQueryClient()
 
   async function signUpWithEmail({ email, password }) {
     return await supabase.auth.signUp({
@@ -116,6 +117,7 @@ export default function useAuth() {
         });
         return;
       } else {
+        queryClient.clear();
         toast.success("Logout successful.");
         router.push("/");
       }

@@ -11,6 +11,11 @@ import useAuth from "@/hooks/useAuth";
 export default function UserNavbar() {
   const { signOutMutation, userQuery } = useAuth();
 
+  const billingUrl =
+    process.env.NODE_ENV === "development"
+      ? `https://test.customer.dodopayments.com/login/bus_Pu24PPCJufCfoljmKe8QT`
+      : `https://live.customer.dodopayments.com/login/bus_Pu24PPCJufCfoljmKe8QT`;
+
   return (
     <header className="fixed top-0 left-0 right-0 h-16 border-b border-gray-200 bg-background/95 backdrop-blur supports-[backdrop-filter]:bg-background/60 z-5 px-6">
       <div className="mx-auto flex h-16 items-center justify-between">
@@ -33,7 +38,7 @@ export default function UserNavbar() {
             </DropdownMenuTrigger>
             <DropdownMenuContent className="w-56">
               <DropdownMenuItem asChild>
-                <Link href={"/billing"}>Billing</Link>
+                <Link href={billingUrl}>Billing</Link>
               </DropdownMenuItem>
               <DropdownMenuItem asChild>
                 <Link href={"/contact-us"}>Contact Us</Link>

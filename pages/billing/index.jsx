@@ -36,39 +36,39 @@ export default function BillingPage() {
   }, [])
 
   async function getSubscriptionDetails() {
-    setIsLoading(true)
-    try {
-      const res = await fetch(`/api/subscriptions/details`)
-      const data = await res.json()
-      if (!res.ok) {
-        throw new Error(data.message ?? "Something went wrong at server side")
-      }
-      console.log("data: ", data.data)
-      setSubscriptionDetails(data.data)
-    } catch (error) {
-      console.error("Error cancelling subscription:", error)
-      toast.error("Subscription cancellation failed")
-    } finally {
-      setIsLoading(false)
-    }
+    // setIsLoading(true)
+    // try {
+    //   const res = await fetch(`/api/subscriptions/details`)
+    //   const data = await res.json()
+    //   if (!res.ok) {
+    //     throw new Error(data.message ?? "Something went wrong at server side")
+    //   }
+    //   console.log("data: ", data.data)
+    //   setSubscriptionDetails(data.data)
+    // } catch (error) {
+    //   console.error("Error cancelling subscription:", error)
+    //   toast.error("Subscription cancellation failed")
+    // } finally {
+    //   setIsLoading(false)
+    // }
   }
 
   async function handleCancelButton() {
-    setIsCancelling(true)
-    try {
-      const res = await fetch(`/api/subscriptions/cancel`)
-      const data = await res.json()
-      if (!res.ok) {
-        throw new Error(data.message ?? "Something went wrong at server side")
-      }
-      await getSubscriptionDetails()
-      toast.success("Subscription cancelled successfully")
-    } catch (error) {
-      console.error("Error cancelling subscription:", error)
-      toast.error("Subscription cancellation failed")
-    } finally {
-      setIsCancelling(false)
-    }
+    // setIsCancelling(true)
+    // try {
+    //   const res = await fetch(`/api/subscriptions/cancel`)
+    //   const data = await res.json()
+    //   if (!res.ok) {
+    //     throw new Error(data.message ?? "Something went wrong at server side")
+    //   }
+    //   await getSubscriptionDetails()
+    //   toast.success("Subscription cancelled successfully")
+    // } catch (error) {
+    //   console.error("Error cancelling subscription:", error)
+    //   toast.error("Subscription cancellation failed")
+    // } finally {
+    //   setIsCancelling(false)
+    // }
   }
 
   if (isLoading) {

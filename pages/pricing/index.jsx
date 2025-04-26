@@ -65,7 +65,7 @@ export default function PricingPage() {
                   </div>
 
                   <div className="flex items-baseline justify-center mb-6">
-                    <span className="text-5xl font-extrabold">INR 800</span>
+                    <span className="text-5xl font-extrabold">$4.99</span>
                     <span className="text-xl font-medium text-muted-foreground ml-2">
                       /month
                     </span>

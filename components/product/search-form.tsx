@@ -1,6 +1,6 @@
 import { useForm } from "react-hook-form";
 import { zodResolver } from "@hookform/resolvers/zod";
-import * as z from "zod";
+import { z } from "zod";
 import { Button } from "@/components/ui/button";
 import {
   Form,
@@ -14,6 +14,11 @@ import { Input } from "@/components/ui/input";
 import { Textarea } from "@/components/ui/textarea";
 import { MultiStepLoader } from "@/components/ui/multi-step-loader";
 import { useRouter } from "next/router";
+import { cn } from "@/lib/utils";
+import { useState } from "react";
+import useProductMutations from "@/hooks/mutations/products/useProductMutations";
+import useKeywordMutations from "@/hooks/mutations/keywords/useKeywordMutations";
+import useRedditPostMutations from "@/hooks/mutations/reddit-posts/useRedditPostMutations";
 
 interface SearchFormProps {
   containerClassName?: string;
@@ -30,6 +35,12 @@ type SearchFormData = z.infer<typeof formSchema>;
 
 function SearchForm({ containerClassName = "" }: SearchFormProps) {
   const router = useRouter();
+  const { createProductMutation } = useProductMutations();
+  const { generateKeywordsMutation } = useKeywordMutations();
+  const { findRedditPostsMutation } = useRedditPostMutations();
+
+  const [currentLoadingStepIndex, setCurrentLoadingStepIndex] = useState(-1);
+
   const form = useForm<SearchFormData>({
     resolver: zodResolver(formSchema),
     defaultValues: {
@@ -39,21 +50,37 @@ function SearchForm({ containerClassName = "" }: SearchFormProps) {
   });
 
   const onSubmit = async (data: SearchFormData) => {
-    console.log(data);
-    // // Handle form submission here
-    await new Promise((resolve) =>
-      setTimeout(() => {
-        router.push({
-          pathname: "/products/[id]",
-          query: { id: "1234" },
-        });
-        form.reset();
-        resolve(true);
-      }, 8000)
-    );
+    try {
+      setCurrentLoadingStepIndex(0);
+      const product = await createProductMutation.mutateAsync({
+        name: data.productName,
+        description: data.productDescription,
+      });
+      console.log("product:", product);
+
+      setCurrentLoadingStepIndex((prev) => prev + 1);
+      const keywords = await generateKeywordsMutation.mutateAsync({
+        productId: product.id,
+      });
+      console.log("keywords: ", keywords);
+
+      setCurrentLoadingStepIndex((prev) => prev + 1);
+      const searchResults = await findRedditPostsMutation.mutateAsync({
+        keywordId: keywords[0].id,
+      });
+
+      console.log("search results: ", searchResults);
+
+      await router.push({
+        pathname: "/products/[slug]",
+        query: { slug: product.slug },
+      });
+    } catch (error) {
+      console.error(error);
+    }
   };
 
-  if (form.formState.isSubmitting) {
+  if (form.formState.isSubmitting || currentLoadingStepIndex !== -1) {
     const loadingStates = [
       {
         text: "Getting started",
@@ -73,15 +100,15 @@ function SearchForm({ containerClassName = "" }: SearchFormProps) {
         <MultiStepLoader
           loadingStates={loadingStates}
           loading={true}
-          // manual={true}
-          // value={2}
+          manual={true}
+          value={currentLoadingStepIndex}
         />
       </div>
     );
   }
 
   return (
-    <div className={containerClassName}>
+    <div className={cn("w-sm", containerClassName)}>
       <Form {...form}>
         <form onSubmit={form.handleSubmit(onSubmit)} className="space-y-6">
           <FormField

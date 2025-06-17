@@ -110,6 +110,10 @@ export const MultiStepLoader = ({
   const [currentState, setCurrentState] = useState(value);
 
   useEffect(() => {
+    setCurrentState(value);
+  }, [value]);
+
+  useEffect(() => {
     if (!loading || manual) {
       setCurrentState(value);
       return;

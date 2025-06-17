@@ -1,4 +1,4 @@
-import { RedditSearchResult } from "@/types/reddit-search-result";
+import { RedditPost } from "@/types/reddit-post";
 import { SquareArrowOutUpRight, Wand } from "lucide-react";
 import Link from "next/link";
 import { Button } from "@/components/ui/button";
@@ -7,20 +7,20 @@ import { useState } from "react";
 import GeneratedReply from "@/components/product/generated-reply";
 
 interface SearchResultCardProps {
-  item: RedditSearchResult;
+  post: RedditPost;
 }
 
-function SearchResultCard({ item }: SearchResultCardProps) {
+function RedditPostCard({ post }: SearchResultCardProps) {
   const [showGeneratedReply, setShowGeneratedReply] = useState(false);
   return (
     <div className="border border-gray-200 rounded-lg p-4">
       <div className="">
         <div className="flex justify-between items-start">
           <h3 className="font-medium text-lg text-[#171717] mb-2">
-            {item.title}
+            {post.title}
           </h3>
           <Link
-            href={item.link}
+            href={post.link}
             target="_blank"
             rel="noopener noreferrer"
             // variant="ghost"
@@ -31,11 +31,11 @@ function SearchResultCard({ item }: SearchResultCardProps) {
           </Link>
         </div>
 
-        <p className="text-gray-600 text-sm mb-4">{item.description}</p>
+        <p className="text-gray-600 text-sm mb-4">{post.snippet}</p>
 
         <div className="flex justify-between items-center">
           <div className="text-sm font-medium text-gray-500">
-            Relevance Score: {item.relevanceScore}
+            Relevance Score: Unknown
           </div>
           <div>
             <Button
@@ -57,4 +57,4 @@ function SearchResultCard({ item }: SearchResultCardProps) {
   );
 }
 
-export default SearchResultCard;
+export default RedditPostCard;

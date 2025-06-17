@@ -6,7 +6,7 @@ function DashboardIndexPage() {
     <>
       <AppLayout>
         <main className="container mx-auto min-h-screen flex flex-col justify-center items-center">
-          <SearchForm containerClassName="w-sm" />
+          <SearchForm />
         </main>
       </AppLayout>
     </>

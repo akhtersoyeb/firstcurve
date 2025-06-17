@@ -1,20 +1,25 @@
-import { useRef, useState, useEffect } from "react";
+import { useRef, useState, useEffect, SetStateAction, Dispatch } from "react";
 import { cn } from "@/lib/utils";
+import { Skeleton } from "@/components/ui/skeleton";
+import { useKeywords } from "@/hooks/queries/keywords";
+import { Keyword } from "@/types/keyword";
 
 interface KeywordProps {
-  keywords: string[];
-  selectedKeyword?: string;
-  onKeywordClick?: (keyword: string) => void;
+  productId: number;
+  selectedKeyword: Keyword | null;
+  setSelectedKeyword: Dispatch<SetStateAction<Keyword | null>>;
 }
 
 export default function ScrollableKeywords({
-  keywords,
+  productId,
   selectedKeyword,
-  onKeywordClick,
+  setSelectedKeyword,
 }: KeywordProps) {
   const scrollContainerRef = useRef<HTMLDivElement>(null);
   const [showLeftFade, setShowLeftFade] = useState(false);
   const [showRightFade, setShowRightFade] = useState(false);
+
+  const keywords = useKeywords({ productId: productId });
 
   const checkForFades = () => {
     const container = scrollContainerRef.current;
@@ -50,9 +55,54 @@ export default function ScrollableKeywords({
     }
   }, []);
 
+  if (keywords.data) {
+    if (!selectedKeyword) {
+      setSelectedKeyword(keywords.data[0]);
+    }
+    return (
+      <div className="relative max-w-full">
+        {/* Left fade indicator */}
+        <div
+          className={cn(
+            "absolute left-0 top-0 h-full w-12 bg-gradient-to-r from-white to-transparent z-10 pointer-events-none transition-opacity duration-300",
+            showLeftFade ? "opacity-100" : "opacity-0"
+          )}
+        />
+
+        {/* Scrollable container */}
+        <div
+          ref={scrollContainerRef}
+          className="flex overflow-x-auto scrollbar-hide gap-3 max-w-full"
+        >
+          {keywords.data.map((keyword) => (
+            <button
+              key={keyword.id}
+              onClick={() => setSelectedKeyword(keyword)}
+              className={cn(
+                "whitespace-nowrap px-4 py-2 rounded-md border border-dashed border-gray-400 transition-all",
+                selectedKeyword && selectedKeyword.value === keyword.value
+                  ? "bg-yellow-200 border-solid border-yellow-400"
+                  : "hover:bg-gray-100"
+              )}
+            >
+              {keyword.value}
+            </button>
+          ))}
+        </div>
+
+        {/* Right fade indicator */}
+        <div
+          className={cn(
+            "absolute right-0 top-0 h-full w-12 bg-gradient-to-l from-white to-transparent z-10 pointer-events-none transition-opacity duration-300",
+            showRightFade ? "opacity-100" : "opacity-0"
+          )}
+        />
+      </div>
+    );
+  }
+
   return (
     <div className="relative max-w-full">
-      {/* Left fade indicator */}
       <div
         className={cn(
           "absolute left-0 top-0 h-full w-12 bg-gradient-to-r from-white to-transparent z-10 pointer-events-none transition-opacity duration-300",
@@ -60,28 +110,15 @@ export default function ScrollableKeywords({
         )}
       />
 
-      {/* Scrollable container */}
       <div
         ref={scrollContainerRef}
         className="flex overflow-x-auto scrollbar-hide gap-3 max-w-full"
       >
-        {keywords.map((keyword) => (
-          <button
-            key={keyword}
-            onClick={() => onKeywordClick?.(keyword)}
-            className={cn(
-              "whitespace-nowrap px-4 py-2 rounded-md border border-dashed border-gray-400 transition-all",
-              selectedKeyword === keyword
-                ? "bg-yellow-200 border-solid border-yellow-400"
-                : "hover:bg-gray-100"
-            )}
-          >
-            {keyword}
-          </button>
+        {Array.from({ length: 8 }).map((_, index) => (
+          <Skeleton key={index} className="h-[42px] w-80 rounded-md" />
         ))}
       </div>
 
-      {/* Right fade indicator */}
       <div
         className={cn(
           "absolute right-0 top-0 h-full w-12 bg-gradient-to-l from-white to-transparent z-10 pointer-events-none transition-opacity duration-300",

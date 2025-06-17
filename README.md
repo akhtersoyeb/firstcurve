@@ -1,9 +1,11 @@
 # Todo
--[ ] Port everything from js to ts
--[ ] Move APIs to supabase function
--[ ] Generate keywords instead of quries for google dorking
--[ ] Launch with only free plan and daily 10 search limit
+
+- [ ] Save product to DB on click of 'Search' button
+- [ ] Generate search keywords for product using gemini
+- [ ] Google custom search using first of the generated keywords
+- [ ] Show the search results to
 
 # v1.0.0 -- Upcoming
-* Find reddit posts
-* Generate replies for reddit posts
+
+- Find reddit posts
+- Generate replies for reddit posts

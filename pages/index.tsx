@@ -5,6 +5,14 @@ import { GetServerSidePropsContext } from "next";
 import useAuth from "@/hooks/useAuth";
 import { Button } from "@/components/ui/button";
 import { useRouter } from "next/router";
+import PublicLayout from "@/components/layout/public-layout";
+import {
+  HeroSection,
+  FeaturesSection,
+  TestimonialsSection,
+  PricingSection,
+  FinalCTASection,
+} from "@/components/page-section/landing";
 
 interface HomeProps {
   user: User | null;
@@ -18,6 +26,18 @@ export default function Home({ user }: HomeProps) {
     await logout();
     router.reload();
   };
+
+  if (!user) {
+    return (
+      <PublicLayout>
+        <HeroSection />
+        <FeaturesSection />
+        <TestimonialsSection />
+        {/* <PricingSection /> */}
+        <FinalCTASection />
+      </PublicLayout>
+    );
+  }
 
   return (
     <>

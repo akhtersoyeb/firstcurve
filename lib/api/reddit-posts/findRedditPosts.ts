@@ -40,7 +40,6 @@ async function saveRedditPosts({
   keywordId,
   productId,
 }: SaveRedditPostsInterface): Promise<RedditPost[]> {
-  console.log("reddit posts: ", redditPosts);
   const { data, error } = await supabase
     .from("product_search_results")
     .insert(

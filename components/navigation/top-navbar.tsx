@@ -17,13 +17,13 @@ function TopNavbar() {
 
           <nav className="hidden md:flex items-center space-x-6">
             <Link
-              href="#features"
+              href="/#features"
               className="text-sm font-medium hover:text-primary transition-colors"
             >
               Features
             </Link>
             <Link
-              href="#testimonials"
+              href="/#testimonials"
               className="text-sm font-medium hover:text-primary transition-colors"
             >
               Testimonials
@@ -35,7 +35,7 @@ function TopNavbar() {
               Pricing
             </Link> */}
             <Link
-              href="#contact"
+              href="/#contact"
               className="text-sm font-medium hover:text-primary transition-colors"
             >
               Contact

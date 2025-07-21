@@ -3,6 +3,7 @@ import RedditPostCard from "./reddit-post-card";
 import { useRedditPosts } from "@/hooks/queries/reddit-posts";
 import { cn } from "@/lib/utils";
 import { Skeleton } from "@/components/ui/skeleton";
+import { useQueryClient } from "@tanstack/react-query";
 
 interface RedditPostsInterface {
   keywordId: number;
@@ -13,9 +14,11 @@ function RedditPosts({
   keywordId,
   containerClassname = "",
 }: RedditPostsInterface) {
+  const queryClient = useQueryClient();
   const redditPosts = useRedditPosts({ keywordId: keywordId });
 
   if (redditPosts.data) {
+    queryClient.invalidateQueries({ queryKey: ["search-logs"] });
     return (
       <div className={cn("space-y-4", containerClassname)}>
         {redditPosts.data.map((post) => (

@@ -13,7 +13,7 @@ export async function findRedditPosts({
 }: FindRedditPostsInterface): Promise<RedditPost[]> {
   const keyword = await getKeyword({ id: keywordId });
   const { data, error } = await supabase.functions.invoke("search-keyword", {
-    body: { keyword: keyword.value },
+    body: { keywordId: keywordId },
   });
 
   if (error) {

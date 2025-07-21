@@ -7,7 +7,7 @@ export default function DashboardIndexPage() {
   return (
     <>
       <AppLayout>
-        <main className="container mx-auto min-h-screen flex flex-col justify-center items-center">
+        <main className="container mx-auto h-[calc(100vh-65px)] px-4 md:px-6 flex flex-col justify-center items-center">
           <SearchForm />
         </main>
       </AppLayout>

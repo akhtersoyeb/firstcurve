@@ -29,9 +29,9 @@ Deno.serve(async (req) => {
     return new Response("ok", { headers: corsHeaders });
   }
 
-  const { keyword } = await req.json();
-  if (!keyword) {
-    return new Response(JSON.stringify({ error: "keyword is required" }), {
+  const { keywordId } = await req.json();
+  if (!keywordId) {
+    return new Response(JSON.stringify({ error: "keywordId is required" }), {
       headers: { ...corsHeaders, "Content-Type": "application/json" },
       status: 400,
     });
@@ -43,14 +43,76 @@ Deno.serve(async (req) => {
     { global: { headers: { Authorization: req.headers.get("Authorization") } } }
   );
 
+  // get user
+  const authHeader = req.headers.get("Authorization")!;
+  const token = authHeader.replace("Bearer ", "");
+  const {
+    data: { user },
+  } = await supabase.auth.getUser(token);
+
+  // get user profile and add search limitation
+  const { data: userProfile, error: userProfileRetrivalError } = await supabase
+    .from("profiles")
+    .select("*")
+    .eq("id", user.id)
+    .single();
+
+  const today = new Date();
+  const startOfToday = new Date(
+    today.getFullYear(),
+    today.getMonth(),
+    today.getDate()
+  );
+  const endOfToday = new Date(startOfToday);
+  endOfToday.setDate(endOfToday.getDate() + 1);
+
+  const { count: searchCountForToday, error: searchCountError } = await supabase
+    .from("user_search_log")
+    .select("*", { count: "exact", head: true })
+    .eq("user_id", user.id)
+    .gte("created_at", startOfToday.toISOString())
+    .lt("created_at", endOfToday.toISOString());
+
+  if (userProfile.subscription_id === null) {
+    // free user
+    if (searchCountForToday >= 10) {
+      return new Response(JSON.stringify({ error: "Search limit exceeded." }), {
+        headers: { ...corsHeaders, "Content-Type": "application/json" },
+        status: 400,
+      });
+    }
+  }
+
+  const { data: keyword, error: keywordError } = await supabase
+    .from("product_keywords")
+    .select("*")
+    .eq("id", keywordId)
+    .single();
+
+  if (keywordError) {
+    return new Response(JSON.stringify({ error: "Keyword not found." }), {
+      headers: { ...corsHeaders, "Content-Type": "application/json" },
+      status: 400,
+    });
+  }
+
   const response = await googleSearch(keyword);
-  console.log("response", response);
-  const items = response.items;
-  const results = items.map((item) => ({
+  const results = response.items.map((item) => ({
     title: item.title,
     link: item.link,
     snippet: item.snippet,
   }));
+
+  // Add a search log for user
+  await supabase
+    .from("user_search_log")
+    .insert({
+      user_id: user.id,
+      keyword_id: keyword.id,
+      product_id: keyword.product_id,
+    })
+    .select()
+    .single();
 
   return new Response(JSON.stringify({ results }), {
     headers: { ...corsHeaders, "Content-Type": "application/json" },

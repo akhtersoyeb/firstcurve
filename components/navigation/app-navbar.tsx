@@ -15,6 +15,7 @@ import {
 } from "@/components/ui/dropdown-menu";
 import { useUser } from "@/hooks/queries/users";
 import useAuth from "@/hooks/useAuth";
+import SearchCounter from "../search-counter";
 
 export default function AppNavbar() {
   const user = useUser();
@@ -30,6 +31,7 @@ export default function AppNavbar() {
             <span className="text-xl font-bold">Firstcurve</span>
           </div>
           <div className="flex items-center space-x-4">
+            <SearchCounter />
             {user.data?.user && (
               <DropdownMenu>
                 <DropdownMenuTrigger className="cursor-pointer focus:outline-none">

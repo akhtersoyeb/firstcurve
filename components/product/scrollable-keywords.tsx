@@ -101,6 +101,7 @@ export default function ScrollableKeywords({
     );
   }
 
+  // Loading state
   return (
     <div className="relative max-w-full">
       <div

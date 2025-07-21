@@ -7,7 +7,7 @@ export default function SignupPage() {
   return (
     <>
       <PublicLayout>
-        <div className="flex flex-col items-center justify-center h-[calc(100vh-65px)]">
+        <div className="flex flex-col items-center justify-center h-[calc(100vh-65px)] px-4 md:px-6">
           <h1 className="text-2xl font-bold">Sign Up</h1>
           <SignupForm />
         </div>

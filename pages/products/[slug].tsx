@@ -3,15 +3,14 @@ import RedditPosts from "@/components/product/reddit-posts";
 import ScrollableKeywords from "@/components/product/scrollable-keywords";
 import { Button } from "@/components/ui/button";
 import { useProduct } from "@/hooks/queries/products";
-import { Keyword } from "@/types/keyword";
-import { RotateCcw, Search } from "lucide-react";
+import useKeywordsStore from "@/stores/useKeywordsStore";
+import { RotateCcw } from "lucide-react";
 import { useRouter } from "next/router";
-import { useState } from "react";
 
 function ProductDetailsPage() {
   const router = useRouter();
+  const { selectedKeyword } = useKeywordsStore();
   const product = useProduct({ slug: router.query.slug as string });
-  const [selectedKeyword, setSelectedKeyword] = useState<Keyword | null>(null);
 
   if (product.data) {
     return (
@@ -32,17 +31,24 @@ function ProductDetailsPage() {
               </div>
             </div>
             <div className="">
-              <ScrollableKeywords
-                productId={product.data.id}
-                selectedKeyword={selectedKeyword}
-                setSelectedKeyword={setSelectedKeyword}
-              />
+              <ScrollableKeywords productId={product.data.id} />
             </div>
-            {selectedKeyword && <RedditPosts keywordId={selectedKeyword?.id} />}
+            {selectedKeyword && (
+              <RedditPosts selectedKeyword={selectedKeyword} />
+            )}
           </main>
         </AppLayout>
       </>
     );
+  }
+
+  if (product.error) {
+    <>
+      <AppLayout>
+        Oops! Something went wrong and sorry of this ugly error UI. We will
+        update this soon.
+      </AppLayout>
+    </>;
   }
 
   return (

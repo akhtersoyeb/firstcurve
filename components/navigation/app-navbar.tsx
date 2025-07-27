@@ -15,7 +15,7 @@ import {
 } from "@/components/ui/dropdown-menu";
 import { useUser } from "@/hooks/queries/users";
 import useAuth from "@/hooks/useAuth";
-import SearchCounter from "../search-counter";
+import SearchCounter from "@/components/search-logs/search-counter";
 
 export default function AppNavbar() {
   const user = useUser();

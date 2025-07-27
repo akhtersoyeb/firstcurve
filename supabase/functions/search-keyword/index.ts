@@ -57,25 +57,15 @@ Deno.serve(async (req) => {
     .eq("id", user.id)
     .single();
 
-  const today = new Date();
-  const startOfToday = new Date(
-    today.getFullYear(),
-    today.getMonth(),
-    today.getDate()
-  );
-  const endOfToday = new Date(startOfToday);
-  endOfToday.setDate(endOfToday.getDate() + 1);
-
-  const { count: searchCountForToday, error: searchCountError } = await supabase
-    .from("user_search_log")
-    .select("*", { count: "exact", head: true })
-    .eq("user_id", user.id)
-    .gte("created_at", startOfToday.toISOString())
-    .lt("created_at", endOfToday.toISOString());
+  // get search count for today
+  const {
+    data: { count: todaySearchCount, resetDateTime },
+    error: todaySearchCountError,
+  } = await supabase.functions.invoke("get-today-search-count");
 
   if (userProfile.subscription_id === null) {
     // free user
-    if (searchCountForToday >= 10) {
+    if (todaySearchCount >= 10) {
       return new Response(JSON.stringify({ error: "Search limit exceeded." }), {
         headers: { ...corsHeaders, "Content-Type": "application/json" },
         status: 400,
@@ -96,7 +86,7 @@ Deno.serve(async (req) => {
     });
   }
 
-  const response = await googleSearch(keyword);
+  const response = await googleSearch(keyword.value);
   const results = response.items.map((item) => ({
     title: item.title,
     link: item.link,

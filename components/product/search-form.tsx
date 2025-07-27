@@ -19,6 +19,7 @@ import { useState } from "react";
 import useProductMutations from "@/hooks/mutations/products/useProductMutations";
 import useKeywordMutations from "@/hooks/mutations/keywords/useKeywordMutations";
 import useRedditPostMutations from "@/hooks/mutations/reddit-posts/useRedditPostMutations";
+import useSearchLogsStore from "@/stores/useSearchLogsStore";
 
 interface SearchFormProps {
   containerClassName?: string;
@@ -35,6 +36,12 @@ type SearchFormData = z.infer<typeof formSchema>;
 
 function SearchForm({ containerClassName = "" }: SearchFormProps) {
   const router = useRouter();
+  const {
+    currentSearchCount,
+    maxSearchCountLimit,
+    isLimitExhaustedModalOpen,
+    setIsLimitExhaustedModalOpen,
+  } = useSearchLogsStore();
   const { createProductMutation } = useProductMutations();
   const { generateKeywordsMutation } = useKeywordMutations();
   const { findRedditPostsMutation } = useRedditPostMutations();
@@ -50,6 +57,13 @@ function SearchForm({ containerClassName = "" }: SearchFormProps) {
   });
 
   const onSubmit = async (data: SearchFormData) => {
+    if (
+      currentSearchCount >= maxSearchCountLimit &&
+      !isLimitExhaustedModalOpen
+    ) {
+      setIsLimitExhaustedModalOpen(true);
+      return;
+    }
     try {
       setCurrentLoadingStepIndex(0);
       const product = await createProductMutation.mutateAsync({

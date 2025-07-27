@@ -7,31 +7,30 @@ import {
   TooltipTrigger,
 } from "@/components/ui/tooltip";
 import { useSearchCountForToday } from "@/hooks/queries/search-logs";
-import { useEffect, useState } from "react";
+import { useEffect } from "react";
+import useSearchLogsStore from "@/stores/useSearchLogsStore";
 
-interface SearchCounterProps {
-  // searchesUsed?: number;
-  maxSearches?: number;
-  onSearchLimitReached?: () => void;
-}
+export default function SearchCounter() {
+  const {
+    currentSearchCount,
+    setCurrentSearchCount,
+    resetTime,
+    maxSearchCountLimit,
+    setResetTime,
+  } = useSearchLogsStore();
 
-export default function SearchCounter({
-  // searchesUsed = 3,
-  maxSearches = 10,
-  onSearchLimitReached,
-}: SearchCounterProps) {
-  const counterQuery = useSearchCountForToday();
+  const searchCountQuery = useSearchCountForToday();
 
-  const [searchCount, setSearchCount] = useState(0);
-  const remainingSearches = maxSearches - searchCount;
+  const remainingSearches = maxSearchCountLimit - currentSearchCount;
 
   useEffect(() => {
-    if (counterQuery.data && counterQuery.isSuccess) {
-      setSearchCount(counterQuery.data);
+    if (searchCountQuery.data && searchCountQuery.isSuccess) {
+      setCurrentSearchCount(searchCountQuery.data.count);
+      setResetTime(searchCountQuery.data.localResetTime);
     }
-  }, [counterQuery.data, counterQuery.isSuccess]);
+  }, [searchCountQuery.data, searchCountQuery.isSuccess]);
 
-  const progressPercentage = (searchCount / maxSearches) * 100;
+  const progressPercentage = (currentSearchCount / maxSearchCountLimit) * 100;
 
   // Determine the visual state based on remaining searches
   const getCounterState = () => {
@@ -95,7 +94,7 @@ export default function SearchCounter({
                   variant={config.badgeVariant}
                   className="text-xs font-medium px-2 py-1 transition-colors duration-200"
                 >
-                  {searchCount}/{maxSearches}
+                  {currentSearchCount}/{maxSearchCountLimit}
                 </Badge>
 
                 {/* Progress Bar */}
@@ -115,7 +114,7 @@ export default function SearchCounter({
                     : "Daily limit reached"}
                 </p>
                 <p className="text-xs text-muted-foreground">
-                  Resets daily at midnight
+                  Resets daily at {resetTime?.toLocaleString()}
                 </p>
               </div>
             </TooltipContent>

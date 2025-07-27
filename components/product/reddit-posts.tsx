@@ -4,20 +4,22 @@ import { useRedditPosts } from "@/hooks/queries/reddit-posts";
 import { cn } from "@/lib/utils";
 import { Skeleton } from "@/components/ui/skeleton";
 import { useQueryClient } from "@tanstack/react-query";
+import { Keyword } from "@/types/keyword";
 
 interface RedditPostsInterface {
-  keywordId: number;
+  selectedKeyword: Keyword;
   containerClassname?: string;
 }
 
 function RedditPosts({
-  keywordId,
+  selectedKeyword,
   containerClassname = "",
 }: RedditPostsInterface) {
   const queryClient = useQueryClient();
-  const redditPosts = useRedditPosts({ keywordId: keywordId });
 
-  if (redditPosts.data) {
+  const redditPosts = useRedditPosts({ keyword: selectedKeyword });
+
+  if (redditPosts?.data) {
     queryClient.invalidateQueries({ queryKey: ["search-logs"] });
     return (
       <div className={cn("space-y-4", containerClassname)}>
@@ -28,7 +30,7 @@ function RedditPosts({
     );
   }
 
-  if (redditPosts.error) {
+  if (redditPosts?.error) {
     return (
       <div className={cn("space-y-4", containerClassname)}>
         <div className="w-full h-96 flex flex-col items-center justify-center">

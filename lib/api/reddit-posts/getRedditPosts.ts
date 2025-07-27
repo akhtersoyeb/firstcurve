@@ -1,6 +1,5 @@
 import { createClient } from "@/lib/supabase/component";
 import { RedditPost } from "@/types/reddit-post";
-import { findRedditPosts } from "./findRedditPosts";
 
 const supabase = createClient();
 
@@ -18,11 +17,6 @@ export async function getRedditPosts({
   if (error) {
     throw error;
   }
-  if (data.length > 0) {
-    return data;
-  }
 
-  // no search results for the keyword, so do a new search
-  const redditPosts = await findRedditPosts({ keywordId: keywordId });
-  return redditPosts;
+  return data;
 }

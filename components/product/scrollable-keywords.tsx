@@ -3,23 +3,19 @@ import { cn } from "@/lib/utils";
 import { Skeleton } from "@/components/ui/skeleton";
 import { useKeywords } from "@/hooks/queries/keywords";
 import { Keyword } from "@/types/keyword";
+import useKeywordsStore from "@/stores/useKeywordsStore";
 
 interface KeywordProps {
   productId: number;
-  selectedKeyword: Keyword | null;
-  setSelectedKeyword: Dispatch<SetStateAction<Keyword | null>>;
 }
 
-export default function ScrollableKeywords({
-  productId,
-  selectedKeyword,
-  setSelectedKeyword,
-}: KeywordProps) {
+export default function ScrollableKeywords({ productId }: KeywordProps) {
+  const { selectedKeyword, setSelectedKeyword } = useKeywordsStore();
+  const keywords = useKeywords({ productId: productId });
+
   const scrollContainerRef = useRef<HTMLDivElement>(null);
   const [showLeftFade, setShowLeftFade] = useState(false);
   const [showRightFade, setShowRightFade] = useState(false);
-
-  const keywords = useKeywords({ productId: productId });
 
   const checkForFades = () => {
     const container = scrollContainerRef.current;
@@ -55,6 +51,10 @@ export default function ScrollableKeywords({
     }
   }, []);
 
+  function handleKeywordClick({ keyword }: { keyword: Keyword }) {
+    setSelectedKeyword(keyword);
+  }
+
   if (keywords.data) {
     if (!selectedKeyword) {
       setSelectedKeyword(keywords.data[0]);
@@ -77,7 +77,7 @@ export default function ScrollableKeywords({
           {keywords.data.map((keyword) => (
             <button
               key={keyword.id}
-              onClick={() => setSelectedKeyword(keyword)}
+              onClick={() => handleKeywordClick({ keyword: keyword })}
               className={cn(
                 "whitespace-nowrap px-4 py-2 rounded-md border border-dashed border-gray-400 transition-all",
                 selectedKeyword && selectedKeyword.value === keyword.value
@@ -99,6 +99,11 @@ export default function ScrollableKeywords({
         />
       </div>
     );
+  }
+
+  // Error state
+  if (keywords.error) {
+    <>Something went wrong while loading keyword. Sorry for the bad UI.</>;
   }
 
   // Loading state

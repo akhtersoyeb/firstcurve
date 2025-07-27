@@ -2,29 +2,43 @@ import { createClient } from "@/lib/supabase/component";
 
 const supabase = createClient();
 
-export async function getSearchCountForToday(): Promise<number> {
-  const {
-    data: { user },
-  } = await supabase.auth.getUser();
-  const today = new Date();
-  const startOfToday = new Date(
-    today.getFullYear(),
-    today.getMonth(),
-    today.getDate()
-  );
-  const endOfToday = new Date(startOfToday);
-  endOfToday.setDate(endOfToday.getDate() + 1);
+interface GetSearchCountForTodayReturnInterface {
+  count: number;
+  resetDateTimeUTC: Intl.DateTimeFormat;
+  localResetTime: string;
+}
 
-  const { count, error } = await supabase
-    .from("user_search_log")
-    .select("*", { count: "exact", head: true })
-    .eq("user_id", user?.id)
-    .gte("created_at", startOfToday.toISOString())
-    .lt("created_at", endOfToday.toISOString());
+export async function getSearchCountForToday(): Promise<GetSearchCountForTodayReturnInterface> {
+  const {
+    data: { count: todaySearchCount, resetDateTime },
+    error,
+  } = await supabase.functions.invoke("get-today-search-count");
 
   if (error) {
     throw error;
   }
 
-  return count ?? 0;
+  return {
+    count: todaySearchCount ?? 0,
+    resetDateTimeUTC: resetDateTime,
+    localResetTime: getLocalResetCountTime(),
+  };
+}
+
+function getLocalResetCountTime() {
+  // 1. Create a Date object for today's UTC midnight
+  const now = new Date();
+  const utcMidnight = new Date(
+    Date.UTC(now.getUTCFullYear(), now.getUTCMonth(), now.getUTCDate() + 1)
+  );
+
+  // 2. Format the time in the user's local time zone
+  const formatter = new Intl.DateTimeFormat(undefined, {
+    hour: "numeric",
+    minute: "numeric",
+    hour12: true, // optional, change to false for 24-hour format
+  });
+
+  const localTime = formatter.format(utcMidnight);
+  return localTime;
 }

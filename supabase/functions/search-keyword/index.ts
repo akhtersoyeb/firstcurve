@@ -104,6 +104,15 @@ Deno.serve(async (req) => {
     .select()
     .single();
 
+  // Update the keyword in db
+  await supabase
+    .from("product_keywords")
+    .update({
+      has_search_results: true,
+    })
+    .eq("id", keyword.id)
+    .select();
+
   return new Response(JSON.stringify({ results }), {
     headers: { ...corsHeaders, "Content-Type": "application/json" },
     status: 200,

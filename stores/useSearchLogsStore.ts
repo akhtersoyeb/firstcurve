@@ -28,7 +28,7 @@ const getDefaultResetTime = (): string => {
 
 const useSearchLogsStore = create<SearchLogsStore>((set) => ({
   currentSearchCount: 0,
-  maxSearchCountLimit: 8,
+  maxSearchCountLimit: 3,
   resetTime: getDefaultResetTime(),
   isLimitExhaustedModalOpen: false,
 

@@ -1,1 +1,1 @@
-export * from "./useRedditPosts";
+export * from "./useGetRedditPosts";

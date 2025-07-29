@@ -4,6 +4,7 @@ import { Skeleton } from "@/components/ui/skeleton";
 import { useKeywords } from "@/hooks/queries/keywords";
 import { Keyword } from "@/types/keyword";
 import useKeywordsStore from "@/stores/useKeywordsStore";
+import useSearchLogsStore from "@/stores/useSearchLogsStore";
 
 interface KeywordProps {
   productId: number;
@@ -11,6 +12,12 @@ interface KeywordProps {
 
 export default function ScrollableKeywords({ productId }: KeywordProps) {
   const { selectedKeyword, setSelectedKeyword } = useKeywordsStore();
+  const {
+    currentSearchCount,
+    maxSearchCountLimit,
+    isLimitExhaustedModalOpen,
+    setIsLimitExhaustedModalOpen,
+  } = useSearchLogsStore();
   const keywords = useKeywords({ productId: productId });
 
   const scrollContainerRef = useRef<HTMLDivElement>(null);
@@ -52,11 +59,21 @@ export default function ScrollableKeywords({ productId }: KeywordProps) {
   }, []);
 
   function handleKeywordClick({ keyword }: { keyword: Keyword }) {
+    if (
+      currentSearchCount >= maxSearchCountLimit &&
+      !isLimitExhaustedModalOpen
+    ) {
+      setIsLimitExhaustedModalOpen(true);
+      return;
+    }
     setSelectedKeyword(keyword);
   }
 
   if (keywords.data) {
-    if (!selectedKeyword) {
+    if (
+      !selectedKeyword ||
+      (selectedKeyword && selectedKeyword.product_id !== productId)
+    ) {
       setSelectedKeyword(keywords.data[0]);
     }
     return (
@@ -82,7 +99,11 @@ export default function ScrollableKeywords({ productId }: KeywordProps) {
                 "whitespace-nowrap px-4 py-2 rounded-md border border-dashed border-gray-400 transition-all",
                 selectedKeyword && selectedKeyword.value === keyword.value
                   ? "bg-yellow-200 border-solid border-yellow-400"
-                  : "hover:bg-gray-100"
+                  : "hover:bg-gray-100",
+                selectedKeyword &&
+                  selectedKeyword.value !== keyword.value &&
+                  keyword.has_search_results &&
+                  "bg-blue-50 border-solid border-blue-50 hover:border-blue-100 hover:bg-blue-50"
               )}
             >
               {keyword.value}

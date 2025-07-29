@@ -18,8 +18,8 @@ import { cn } from "@/lib/utils";
 import { useState } from "react";
 import useProductMutations from "@/hooks/mutations/products/useProductMutations";
 import useKeywordMutations from "@/hooks/mutations/keywords/useKeywordMutations";
-import useRedditPostMutations from "@/hooks/mutations/reddit-posts/useRedditPostMutations";
 import useSearchLogsStore from "@/stores/useSearchLogsStore";
+import { useRedditPostMutations } from "@/hooks/mutations/reddit-posts";
 
 interface SearchFormProps {
   containerClassName?: string;
@@ -132,7 +132,11 @@ function SearchForm({ containerClassName = "" }: SearchFormProps) {
               <FormItem>
                 <FormLabel>Product Name</FormLabel>
                 <FormControl>
-                  <Input placeholder="Enter product name" {...field} />
+                  <Input
+                    placeholder="Enter product name"
+                    className="bg-white"
+                    {...field}
+                  />
                 </FormControl>
                 <FormMessage />
               </FormItem>
@@ -147,7 +151,7 @@ function SearchForm({ containerClassName = "" }: SearchFormProps) {
                 <FormControl>
                   <Textarea
                     placeholder="Enter product description"
-                    className="min-h-[100px]"
+                    className="min-h-[100px] bg-white"
                     {...field}
                   />
                 </FormControl>

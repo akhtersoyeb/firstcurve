@@ -18,7 +18,7 @@ export default function ScrollableKeywords({ productId }: KeywordProps) {
     isLimitExhaustedModalOpen,
     setIsLimitExhaustedModalOpen,
   } = useSearchLogsStore();
-  const keywords = useKeywords({ productId: productId });
+  const keywordsQuery = useKeywords({ productId: productId });
 
   const scrollContainerRef = useRef<HTMLDivElement>(null);
   const [showLeftFade, setShowLeftFade] = useState(false);
@@ -69,12 +69,12 @@ export default function ScrollableKeywords({ productId }: KeywordProps) {
     setSelectedKeyword(keyword);
   }
 
-  if (keywords.data) {
+  if (keywordsQuery.data) {
     if (
       !selectedKeyword ||
       (selectedKeyword && selectedKeyword.product_id !== productId)
     ) {
-      setSelectedKeyword(keywords.data[0]);
+      setSelectedKeyword(keywordsQuery.data[0]);
     }
     return (
       <div className="relative max-w-full">
@@ -91,7 +91,7 @@ export default function ScrollableKeywords({ productId }: KeywordProps) {
           ref={scrollContainerRef}
           className="flex overflow-x-auto scrollbar-hide gap-3 max-w-full"
         >
-          {keywords.data.map((keyword) => (
+          {keywordsQuery.data.map((keyword) => (
             <button
               key={keyword.id}
               onClick={() => handleKeywordClick({ keyword: keyword })}
@@ -123,7 +123,7 @@ export default function ScrollableKeywords({ productId }: KeywordProps) {
   }
 
   // Error state
-  if (keywords.error) {
+  if (keywordsQuery.error) {
     <>Something went wrong while loading keyword. Sorry for the bad UI.</>;
   }
 

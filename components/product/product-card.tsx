@@ -2,6 +2,7 @@ import { Product } from "@/types/product";
 import moment from "moment";
 import { Calendar, GitFork, Trash2 } from "lucide-react";
 import { useRouter } from "next/router";
+import useProductMutations from "@/hooks/mutations/products/useProductMutations";
 
 interface ProductCardInterface {
   product: Product;
@@ -9,13 +10,14 @@ interface ProductCardInterface {
 
 export default function ProductCard({ product }: ProductCardInterface) {
   const router = useRouter();
+  const { deleteProductMutation } = useProductMutations();
 
   function handleProductCardClick() {
     router.push(`/products/${product.slug}`);
   }
 
   function handleProductDeleteButton() {
-    console.log("Handle product delete for: ", product);
+    deleteProductMutation.mutate({ productId: product.id });
   }
 
   return (

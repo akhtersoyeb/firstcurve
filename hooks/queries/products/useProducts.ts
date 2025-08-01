@@ -1,12 +1,10 @@
 import { getProducts } from "@/lib/api/products";
 import { useQuery } from "@tanstack/react-query";
-import { useUser } from "@/hooks/queries/users";
+import { productQueryKeys } from "@/lib/query-keys";
 
 export function useProducts() {
-  // const user = useUser()
   return useQuery({
-    queryKey: ["product", "list"],
+    queryKey: [...productQueryKeys.list],
     queryFn: () => getProducts(),
-    // enabled: !!user.data,
   });
 }

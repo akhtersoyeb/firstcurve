@@ -1,4 +1,5 @@
 import { getKeywords } from "@/lib/api/keywords";
+import { keywordQueryKeys } from "@/lib/query-keys";
 import { useQuery } from "@tanstack/react-query";
 
 interface UseKeywordsInterface {
@@ -7,7 +8,7 @@ interface UseKeywordsInterface {
 
 export function useKeywords({ productId }: UseKeywordsInterface) {
   return useQuery({
-    queryKey: ["keyword", "list", productId],
+    queryKey: [...keywordQueryKeys.list, productId],
     queryFn: () => getKeywords({ productId: productId }),
     enabled: !!productId,
   });

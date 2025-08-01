@@ -5,6 +5,7 @@ import { cn } from "@/lib/utils";
 import { Skeleton } from "@/components/ui/skeleton";
 import { useQueryClient } from "@tanstack/react-query";
 import { Keyword } from "@/types/keyword";
+import { searchLogQueryKeys } from "@/lib/query-keys";
 
 interface RedditPostsInterface {
   selectedKeyword: Keyword;
@@ -20,7 +21,7 @@ function RedditPosts({
   const redditPosts = useGetRedditPosts({ keywordId: selectedKeyword.id });
 
   if (redditPosts?.data) {
-    queryClient.invalidateQueries({ queryKey: ["search-logs"] });
+    queryClient.invalidateQueries({ queryKey: [...searchLogQueryKeys.detail] });
     return (
       <div className={cn("space-y-4", containerClassname)}>
         {redditPosts.data.map((post) => (

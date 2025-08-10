@@ -1,6 +1,6 @@
 import { Product } from "@/types/product";
 import moment from "moment";
-import { Calendar, GitFork, Trash2 } from "lucide-react";
+import { Calendar, Trash2 } from "lucide-react";
 import { useRouter } from "next/router";
 import useProductMutations from "@/hooks/mutations/products/useProductMutations";
 

@@ -3,7 +3,7 @@ import {
   HeroSection,
   FeaturesSection,
   TestimonialsSection,
-  PricingSection,
+  // PricingSection,
   FinalCTASection,
 } from "@/components/page-section/landing";
 

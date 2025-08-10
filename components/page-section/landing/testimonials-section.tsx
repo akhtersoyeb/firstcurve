@@ -32,8 +32,9 @@ function TestimonialsSection() {
                   ))}
                 </div>
                 <blockquote className="text-lg mb-4">
-                  "I built Firstcurve to grow my other micro saas products. It
-                  works great and I'm getting more organic traffic from reddit."
+                  &quot;I built Firstcurve to grow my other micro saas products.
+                  It works great and I&apos;m getting more organic traffic from
+                  reddit.&quot;
                 </blockquote>
                 <div className="flex items-center space-x-3">
                   <Image

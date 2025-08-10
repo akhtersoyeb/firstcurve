@@ -32,7 +32,7 @@ export default function SearchLimitExhaustedModal() {
           {/* Limit Info */}
           <div className="text-center space-y-2">
             <p className="text-gray-600">
-              You've used all{" "}
+              You&apos;ve used all{" "}
               <Badge variant="secondary" className="mx-1">
                 10 searches
               </Badge>{" "}
@@ -133,7 +133,7 @@ export default function SearchLimitExhaustedModal() {
             onClick={() => setIsLimitExhaustedModalOpen(false)}
             className="text-gray-500 hover:text-gray-700"
           >
-            I'll wait for reset
+            I&apos;ll wait for reset
           </Button>
         </div>
       </DialogContent>

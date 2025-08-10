@@ -9,7 +9,7 @@ import { useRouter } from "next/router";
 
 function ProductDetailsPage() {
   const router = useRouter();
-  const { selectedKeyword, setSelectedKeyword } = useKeywordsStore();
+  const { selectedKeyword } = useKeywordsStore();
   const product = useProduct({ slug: router.query.slug as string });
 
   if (product.data) {

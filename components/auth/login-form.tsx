@@ -40,13 +40,11 @@ function LoginForm({ containerClassName = "" }: LoginFormProps) {
   });
 
   const onSubmit = async (data: LoginFormData) => {
-    console.log(data);
     try {
       await loginWithEmail({ email: data.email, password: data.password });
       toast.success("Login successful");
       router.push("/dashboard");
     } catch (error: any) {
-      console.error(error);
       toast.error(error?.message ?? "Login failed");
     }
   };

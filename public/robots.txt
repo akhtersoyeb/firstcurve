@@ -1,0 +1,9 @@
+# *
+User-agent: *
+Allow: /
+
+# Host
+Host: https://firstcurve.in
+
+# Sitemaps
+Sitemap: https://firstcurve.in/sitemap.xml

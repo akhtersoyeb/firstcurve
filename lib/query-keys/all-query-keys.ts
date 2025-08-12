@@ -10,6 +10,7 @@ export const keywordQueryKeys = {
 
 export const redditPostQueryKeys = {
   list: ["reddit-post", "list"],
+  detail: ["reddit-post"],
 };
 
 export const searchLogQueryKeys = {

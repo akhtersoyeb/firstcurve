@@ -2,16 +2,28 @@ import { RedditPost } from "@/types/reddit-post";
 import { SquareArrowOutUpRight, Wand } from "lucide-react";
 import Link from "next/link";
 import { Button } from "@/components/ui/button";
-import { STATIC_GENERATED_REPLY } from "@/lib/statics";
 import { useState } from "react";
 import GeneratedReply from "@/components/product/generated-reply";
+import { useRedditPostMutations } from "@/hooks/mutations/reddit-posts";
 
 interface SearchResultCardProps {
   post: RedditPost;
 }
 
 function RedditPostCard({ post }: SearchResultCardProps) {
+  const { generateReplyForRedditPostMutation } = useRedditPostMutations();
   const [showGeneratedReply, setShowGeneratedReply] = useState(false);
+  const [generatedReply, setGeneratedReply] = useState<string | null>(
+    post.generated_reply ?? null
+  );
+
+  async function handleGenerateReply() {
+    const reply = await generateReplyForRedditPostMutation.mutateAsync({
+      searchResultId: post.id,
+    });
+    setGeneratedReply(reply);
+  }
+
   return (
     <div className="border border-gray-200 rounded-lg p-4">
       <div className="">
@@ -41,7 +53,11 @@ function RedditPostCard({ post }: SearchResultCardProps) {
             <Button
               variant="outline"
               size="sm"
-              onClick={() => setShowGeneratedReply(true)}
+              onClick={handleGenerateReply}
+              disabled={
+                generateReplyForRedditPostMutation.isPending ||
+                (post.generated_reply ? true : false)
+              }
               // className="bg-gray-100 hover:bg-gray-200 text-[#171717] border-gray-200"
             >
               <Wand className="mr-2 h-4 w-4" />
@@ -50,7 +66,9 @@ function RedditPostCard({ post }: SearchResultCardProps) {
           </div>
         </div>
         <GeneratedReply
-          reply={showGeneratedReply ? STATIC_GENERATED_REPLY : undefined}
+          reply={generatedReply}
+          showGeneratedReply={showGeneratedReply}
+          isLoading={generateReplyForRedditPostMutation.isPending}
         />
       </div>
     </div>

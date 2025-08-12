@@ -6,6 +6,7 @@ type RedditPost = {
   snippet: string;
   product_id: number;
   product_keyword_id: number;
+  generated_reply: string | null;
 };
 
 export type { RedditPost };

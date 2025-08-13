@@ -4,6 +4,7 @@ import { Separator } from "@/components/ui/separator";
 import { STATIC_GENERATED_REPLY } from "@/lib/statics";
 import { cn } from "@/lib/utils";
 import { Skeleton } from "@/components/ui/skeleton";
+import { CopyButton } from "@/components/micro/copy-button";
 
 interface GeneratedReplyProps {
   reply: string | null;
@@ -28,14 +29,15 @@ function GeneratedReply({
             Generating Reply...
           </h4>
 
-          <Button
+          {/* <Button
             variant="ghost"
             size="sm"
             className="text-gray-500 hover:text-gray-700 hidden"
           >
             <Copy className="h-4 w-4 mr-1" />
             Copy
-          </Button>
+          </Button> */}
+          <CopyButton textToCopy={""} className="hidden" />
         </div>
 
         <div className="space-y-2">
@@ -60,14 +62,7 @@ function GeneratedReply({
             Generated Reply
           </h4>
 
-          <Button
-            variant="ghost"
-            size="sm"
-            className="text-gray-500 hover:text-gray-700"
-          >
-            <Copy className="h-4 w-4 mr-1" />
-            Copy
-          </Button>
+          <CopyButton textToCopy={reply} />
         </div>
 
         <p className="text-gray-600 text-sm bg-gray-50 p-4 rounded-md">

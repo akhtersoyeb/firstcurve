@@ -63,7 +63,7 @@ Deno.serve(async (req) => {
     error: todaySearchCountError,
   } = await supabase.functions.invoke("get-today-search-count");
 
-  if (userProfile.subscription_id === null) {
+  if (userProfile?.subscription_id === null) {
     // free user
     if (todaySearchCount >= 10) {
       return new Response(JSON.stringify({ error: "Search limit exceeded." }), {
